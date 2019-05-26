@@ -8,4 +8,4 @@ Source code will be released after publication.
 
 ## Video:
 
-<a href="https://youtu.be/XxBw2nmL8t0" target="_blank"><img src="img/title.png" alt="video" width="640" height="360" border="10" /></a>
+<a href="https://www.youtube.com/watch?v=GIYGAjOeeI8&feature=youtu.be" target="_blank"><img src="img/title.png" alt="video" width="640" height="360" border="10" /></a>

@@ -11,11 +11,11 @@ high-quality trajectories within a few milliseconds and that it can generate agg
 
 <!-- add some gif of the paper video: -->
 <p align="center">
-  <img src="img/exp1.gif" width = "480" height = "270"/>
+  <img src="img/exp1.gif" width = "400" height = "225"/>
 <!-- </p> -->
 
 <!-- <p align="center"> -->
-  <img src="img/exp2.gif" width = "480" height = "270"/>
+  <img src="img/exp2.gif" width = "400" height = "225"/>
 </p>
 
 __Authors__: [Boyu Zhou](https://github.com/ZbyLGsc), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).

@@ -1,0 +1,38 @@
+<package>
+  <description>multi_map_server</description>
+  <name>multi_map_server</name>
+  <version>0.0.0</version>
+  <maintainer email="eeshaojie@todo.todo">Shaojie Shen</maintainer>
+  <license>BSD</license>
+  
+  <url>http://ros.org/wiki/multi_map_server</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>visualization_msgs</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>laser_geometry</build_depend>
+  <build_depend>pose_utils</build_depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>quadrotor_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>visualization_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>std_srvs</run_depend>
+  <run_depend>laser_geometry</run_depend>
+  <run_depend>pose_utils</run_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>quadrotor_msgs</run_depend>
+
+  <export>
+    <cpp cflags="-I${prefix}/include -I${prefix}/msg/cpp"/>
+  </export>
+</package>
+

@@ -1,0 +1,27 @@
+\subsubsection usage Usage
+\verbatim
+<node name="DisturbanceUI" pkg="so3_disturbance_generator" type="DisturbanceUI">
+  <param name="fxy" type="double" value="0.0" />
+  <param name="stdfxy" type="double" value="0.0" />
+  <param name="fz" type="double" value="0.0" />
+  <param name="stdfz" type="double" value="0.0" />
+  <param name="mrp" type="double" value="0.0" />
+  <param name="stdmrp" type="double" value="0.0" />
+  <param name="myaw" type="double" value="0.0" />
+  <param name="stdmyaw" type="double" value="0.0" />
+  <param name="enable_noisy_odom" type="bool" value="False" />
+  <param name="stdxyz" type="double" value="0.0" />
+  <param name="stdvxyz" type="double" value="0.0" />
+  <param name="stdrp" type="double" value="0.0" />
+  <param name="stdyaw" type="double" value="0.0" />
+  <param name="enable_drift_odom" type="bool" value="True" />
+  <param name="stdvdriftxyz" type="double" value="0.0" />
+  <param name="stdvdriftyaw" type="double" value="0.0" />
+  <param name="vdriftx" type="double" value="0.0" />
+  <param name="vdrifty" type="double" value="0.0" />
+  <param name="vdriftz" type="double" value="0.0" />
+  <param name="vdriftyaw" type="double" value="0.0" />
+  <param name="place_holder" type="bool" value="True" />
+</node>
+\endverbatim
+

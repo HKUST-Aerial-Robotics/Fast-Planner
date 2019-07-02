@@ -1,0 +1,6 @@
+# Gains for Laser-based Pelican 
+gains:
+  pos: {x: 5.0, y: 5.0, z: 15.0}
+  vel: {x: 5.0, y: 5.0, z: 5.0}
+  rot: {x: 3.5, y: 3.5, z: 1.0}
+  ang: {x: 0.4, y: 0.4, z: 0.1}

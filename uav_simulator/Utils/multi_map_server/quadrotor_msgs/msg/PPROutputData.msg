@@ -1,0 +1,16 @@
+Header header
+uint16 quad_time
+float64 des_thrust
+float64 des_roll
+float64 des_pitch
+float64 des_yaw
+float64 est_roll
+float64 est_pitch
+float64 est_yaw
+float64 est_angvel_x
+float64 est_angvel_y
+float64 est_angvel_z
+float64 est_acc_x
+float64 est_acc_y
+float64 est_acc_z
+uint16[4] pwm

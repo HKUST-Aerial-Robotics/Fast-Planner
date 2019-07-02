@@ -1,0 +1,44 @@
+# Copyright 2009 Karsten Ahnert and Mario Mulansky.
+# Distributed under the Boost Software License, Version 1.0. (See
+# accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+import os ;
+import modules ;
+import path ;
+
+path-constant BOOST_ROOT : [ os.environ BOOST_ROOT ] ; 
+
+project 
+   : requirements 
+     <include>$(BOOST_ROOT)
+     <toolset>clang:<cxxflags>-Wno-unused-variable
+   ;
+
+# tests, regression tests and examples
+build-project libs/numeric/odeint/test ;
+build-project libs/numeric/odeint/examples ;
+
+
+# additional tests with external libraries :
+# build-project libs/numeric/odeint/test_external/gmp ;
+# build-project libs/numeric/odeint/test_external/mkl ;
+# build-project libs/numeric/odeint/test_external/gsl ;
+
+
+# docs:
+# build-project libs/numeric/odeint/doc ;
+
+
+
+
+
+
+###### The following is copied from another sandbox project #####
+###### to get the quickbook and boostbook working ...       #####
+
+# local boost-root = [ modules.peek : BOOST_ROOT ] ;
+# local explore-header-include = $(top)/../.. ;
+# use-project /boost/regex : $(boost-root)/libs/regex/build ;
+
+##################################################################

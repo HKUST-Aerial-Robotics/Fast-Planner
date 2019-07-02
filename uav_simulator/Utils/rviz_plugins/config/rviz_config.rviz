@@ -1,0 +1,1242 @@
+Panels:
+  - Class: rviz/Tool Properties
+    Expanded: ~
+    Name: Tool Properties
+    Splitter Ratio: 0.5
+  - Class: rviz/Tool Properties
+    Expanded: ~
+    Name: Tool Properties
+    Splitter Ratio: 0.5
+  - Class: rviz/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /Basic1/Grid1
+        - /Pelican1/Map 3D Laser1
+        - /NUC1
+        - /NUC1/Multi1/Multi3DMap1/Autocompute Value Bounds1
+        - /NUC1/VINS1
+        - /NUC1/VINS1/IMU1
+        - /NUC1/VINS1/Control1
+        - /NUC1/VINS1/Control1/Robot Control1/Namespaces1
+        - /Marker1
+      Splitter Ratio: 0.5
+    Tree Height: 609
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+    Name: Views
+    Splitter Ratio: 0.5
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.5
+          Cell Size: 1
+          Class: rviz/Grid
+          Color: 160; 160; 164
+          Enabled: true
+          Line Style:
+            Line Width: 0.03
+            Value: Lines
+          Name: Grid
+          Normal Cell Count: 0
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Plane: XY
+          Plane Cell Count: 1000
+          Reference Frame: <Fixed Frame>
+          Value: true
+        - Class: rviz/Axes
+          Enabled: true
+          Length: 10
+          Name: Axes
+          Radius: 0.01
+          Reference Frame: <Fixed Frame>
+          Value: true
+      Enabled: true
+      Name: Basic
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_ukf/robot
+          Name: Robot UKF
+          Namespaces:
+            mesh: true
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Axes Length: 0.5
+          Axes Radius: 0.05
+          Class: rviz/Pose
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.3
+          Head Radius: 0.1
+          Name: Pose UKF
+          Shaft Length: 1
+          Shaft Radius: 0.05
+          Shape: Axes
+          Topic: /odom_visualization_ukf/pose
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_ukf/velocity
+          Name: Velocity UKF
+          Namespaces:
+            velocity: true
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 255; 0; 0
+          Enabled: true
+          Line Style: Lines
+          Line Width: 0.03
+          Name: Path UKF
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Topic: /odom_visualization_ukf/path
+          Value: true
+        - Class: rviz/Marker
+          Enabled: false
+          Marker Topic: /odom_visualization_ukf/covariance
+          Name: Cov UKF
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+      Enabled: true
+      Name: UKF Odom
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_slam/robot
+          Name: Robot SLAM
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Axes Length: 0.3
+          Axes Radius: 0.12
+          Class: rviz/Pose
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.3
+          Head Radius: 0.1
+          Name: Pose SLAM
+          Shaft Length: 1
+          Shaft Radius: 0.05
+          Shape: Axes
+          Topic: /odom_visualization_slam/pose
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /odom_visualization_slam/velocity
+          Name: Velocity SLAM
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 255; 255; 0
+          Enabled: true
+          Line Style: Lines
+          Line Width: 0.03
+          Name: Path SLAM
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Topic: /odom_visualization_slam/path
+          Value: true
+        - Class: rviz/Marker
+          Enabled: false
+          Marker Topic: /odom_visualization_slam/covariance
+          Name: Cov SLAM
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+      Enabled: false
+      Name: SLAM Odom
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 0; 0; 0
+          Enabled: true
+          Line Style: Lines
+          Line Width: 0.03
+          Name: Path World
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Topic: /waypoint_generator/waypoints_vis
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 0; 255; 0
+          Enabled: true
+          Line Style: Lines
+          Line Width: 0.03
+          Name: Path Desired
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Topic: /trajectory_generator/path
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 255; 0; 255
+          Enabled: true
+          Line Style: Lines
+          Line Width: 0.03
+          Name: Path Trajectory
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Topic: /trajectory_generator/traj
+          Value: true
+      Enabled: true
+      Name: Trajectory Generator
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 255; 0; 255
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Features
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.2
+          Style: Spheres
+          Topic: /visual_pose_estimator/pointcloud
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 255; 255; 255
+          Color Transformer: RGBF32
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Loc Err Points
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.1
+          Style: Spheres
+          Topic: /visual_pose_estimator/loc_pointcloud
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Class: rviz/Marker
+          Enabled: false
+          Marker Topic: /visual_pose_estimator/loc_connect
+          Name: Loc Err Lines
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 255; 255; 255
+          Color Transformer: RGBF32
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Stereo Dense
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.1
+          Style: Boxes
+          Topic: /visual_slam/cloud_stereo
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 0; 255; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Stereo Sparse
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.1
+          Style: Spheres
+          Topic: /visual_slam/points_stereo
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Alpha: 0.2
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 2.8
+            Min Value: -0.8
+            Value: true
+          Axis: Z
+          Channel Name: z
+          Class: rviz/PointCloud
+          Color: 255; 255; 255
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 2
+          Min Color: 0; 0; 0
+          Min Intensity: -0.8
+          Name: Map 3D Vision
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.2
+          Style: Boxes
+          Topic: /visual_slam/map
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /visual_slam/pose_graph_odom
+          Name: SLAM Pose Graph
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /visual_slam/pose_graph_loop
+          Name: SLAM Loop CLosure
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: false
+          Marker Topic: /visual_slam/pose_graph_loop_tf
+          Name: SLAM Loop TF
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: false
+      Enabled: true
+      Name: Hummingbird
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.7
+          Class: rviz_plugins/ProbMapDisplay
+          Draw Behind: false
+          Enabled: true
+          Name: Map 2D Laser
+          Topic: /map3d_visualization/map2d
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 255; 255; 255
+          Color Transformer: RGBF32
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Map 3D Laser
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.1
+          Style: Spheres
+          Topic: /map3d_visualization/map3d
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 0.60212
+            Min Value: -0.161681
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/LaserScan
+          Color: 255; 0; 4
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 0; 4
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Laser Raw
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.01
+          Style: Points
+          Topic: /laser/scan
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: false
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/LaserScan
+          Color: 255; 255; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 0
+          Max Intensity: 4096
+          Min Color: 255; 255; 0
+          Min Intensity: 0
+          Name: Laser
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.01
+          Style: Points
+          Topic: /laser_odom_pelican/lscan
+          Use Fixed Frame: true
+          Use rainbow: false
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud
+          Color: 255; 170; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 4096
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: Kinect
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.01
+          Style: Points
+          Topic: /kinect/depth/points
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 255; 255; 0
+          Enabled: true
+          Line Style: Lines
+          Line Width: 0.03
+          Name: RRT* Path
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Topic: /rrts/path
+          Value: true
+        - Arrow Length: 0.3
+          Class: rviz/PoseArray
+          Color: 255; 255; 0
+          Enabled: true
+          Name: RRT* Pose
+          Topic: /rrts/path_pose
+          Value: true
+      Enabled: true
+      Name: Pelican
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /monocular_velocity_estimator/plane
+          Name: Plane
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /monocular_velocity_estimator/normal
+          Name: Normal
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /monocular_velocity_estimator/velocity
+          Name: Velocity
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: OpticalFlow
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.7
+          Class: rviz_plugins/AerialMapDisplay
+          Draw Behind: true
+          Enabled: true
+          Name: AerialMapDisplay
+          Topic: /aerial_map_publisher/aerial_map
+          Value: true
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_laser/robot
+              Name: Robot Laser
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Axes Length: 0.5
+              Axes Radius: 0.05
+              Class: rviz/Pose
+              Color: 255; 25; 0
+              Enabled: true
+              Head Length: 0.3
+              Head Radius: 0.1
+              Name: Pose Laser
+              Shaft Length: 1
+              Shaft Radius: 0.05
+              Shape: Axes
+              Topic: /odom_visualization_ukf_laser/pose
+              Value: true
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_laser/velocity
+              Name: Velocity Laser
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 255; 0; 0
+              Enabled: true
+              Line Style: Lines
+              Line Width: 0.03
+              Name: Path Laser
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Topic: /odom_visualization_ukf_laser/path
+              Value: true
+            - Class: rviz/Marker
+              Enabled: false
+              Marker Topic: /odom_visualization_ukf_laser/covariance
+              Name: Cov Laser
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: false
+          Enabled: false
+          Name: Laser
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_vision/robot
+              Name: Robot Vision
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Axes Length: 0.5
+              Axes Radius: 0.05
+              Class: rviz/Pose
+              Color: 255; 25; 0
+              Enabled: true
+              Head Length: 0.3
+              Head Radius: 0.1
+              Name: Pose Vision
+              Shaft Length: 1
+              Shaft Radius: 0.05
+              Shape: Axes
+              Topic: /odom_visualization_ukf_vision/pose
+              Value: true
+            - Class: rviz/Marker
+              Enabled: false
+              Marker Topic: /odom_visualization_ukf_vision/velocity
+              Name: Velocity Vision
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: false
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 0; 255; 0
+              Enabled: true
+              Line Style: Lines
+              Line Width: 0.03
+              Name: Path Vision
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Topic: /odom_visualization_ukf_vision/path
+              Value: true
+            - Class: rviz/Marker
+              Enabled: false
+              Marker Topic: /odom_visualization_ukf_vision/covariance
+              Name: Cov Vision
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: false
+            - Alpha: 1
+              Autocompute Intensity Bounds: true
+              Autocompute Value Bounds:
+                Max Value: 10
+                Min Value: -10
+                Value: true
+              Axis: Z
+              Channel Name: intensity
+              Class: rviz/PointCloud
+              Color: 255; 0; 0
+              Color Transformer: FlatColor
+              Decay Time: 0
+              Enabled: true
+              Invert Rainbow: false
+              Max Color: 255; 255; 255
+              Max Intensity: 4096
+              Min Color: 0; 0; 0
+              Min Intensity: 0
+              Name: Stereo Features
+              Position Transformer: XYZ
+              Queue Size: 10
+              Selectable: true
+              Size (Pixels): 10
+              Size (m): 0.2
+              Style: Points
+              Topic: /stereo_pose_estimator/pointcloud
+              Use Fixed Frame: true
+              Use rainbow: true
+              Value: true
+          Enabled: true
+          Name: Vision
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_gps/robot
+              Name: Robot GPS
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Axes Length: 0.5
+              Axes Radius: 0.05
+              Class: rviz/Pose
+              Color: 255; 25; 0
+              Enabled: true
+              Head Length: 0.3
+              Head Radius: 0.1
+              Name: Pose GPS
+              Shaft Length: 1
+              Shaft Radius: 0.05
+              Shape: Axes
+              Topic: /odom_visualization_ukf_gps/pose
+              Value: true
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_gps/velocity
+              Name: Velocity GPS
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 255; 255; 0
+              Enabled: true
+              Line Style: Lines
+              Line Width: 0.03
+              Name: Path GPS
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Topic: /odom_visualization_ukf_gps/path
+              Value: true
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_gps/covariance
+              Name: Cov GPS
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+          Enabled: false
+          Name: GPS
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_multi/robot
+              Name: Robot Multi
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Axes Length: 0.5
+              Axes Radius: 0.05
+              Class: rviz/Pose
+              Color: 255; 25; 0
+              Enabled: true
+              Head Length: 0.3
+              Head Radius: 0.1
+              Name: Pose Multi
+              Shaft Length: 1
+              Shaft Radius: 0.05
+              Shape: Axes
+              Topic: /odom_visualization_ukf_multi/pose
+              Value: true
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_multi/velocity
+              Name: Velocity Multi
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 255; 0; 0
+              Enabled: true
+              Line Style: Lines
+              Line Width: 0.03
+              Name: Path Multi
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Topic: /odom_visualization_ukf_multi/path
+              Value: true
+            - Class: rviz/Marker
+              Enabled: false
+              Marker Topic: /odom_visualization_ukf_multi/trajectory
+              Name: Traj Multi
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: false
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_multi/covariance
+              Name: Cov Multi
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+            - Class: rviz/Marker
+              Enabled: false
+              Marker Topic: /odom_visualization_ukf_multi/covariance_velocity
+              Name: Cov Vel Multi
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: false
+            - Class: rviz/Marker
+              Enabled: false
+              Marker Topic: /multi_sensor_slam/graph
+              Name: SLAM Graph
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: false
+            - Class: rviz_plugins/MultiProbMapDisplay
+              Draw Behind: true
+              Enabled: true
+              Name: MultiProbMapDisplay
+              Topic: /multi_map_visualization/maps2d
+              Value: true
+            - Alpha: 1
+              Autocompute Intensity Bounds: true
+              Autocompute Value Bounds:
+                Max Value: 2.15
+                Min Value: -0.35
+                Value: true
+              Axis: Z
+              Channel Name: intensity
+              Class: rviz/PointCloud
+              Color: 255; 255; 255
+              Color Transformer: AxisColor
+              Decay Time: 0
+              Enabled: true
+              Invert Rainbow: false
+              Max Color: 255; 255; 255
+              Max Intensity: 4096
+              Min Color: 0; 0; 0
+              Min Intensity: 0
+              Name: Multi3DMap
+              Position Transformer: XYZ
+              Queue Size: 10
+              Selectable: true
+              Size (Pixels): 3
+              Size (m): 0.1
+              Style: Spheres
+              Topic: /multi_map_visualization/map3d
+              Use Fixed Frame: true
+              Use rainbow: true
+              Value: true
+            - Alpha: 0.5
+              Buffer Length: 1
+              Class: rviz/Range
+              Color: 255; 0; 255
+              Enabled: true
+              Name: Laser Height
+              Queue Size: 100
+              Topic: /odom_visualization_ukf_multi/height
+              Value: true
+            - Class: rviz/Marker
+              Enabled: true
+              Marker Topic: /odom_visualization_ukf_multi/sensor
+              Name: Sensor Availability
+              Namespaces:
+                {}
+              Queue Size: 100
+              Value: true
+          Enabled: true
+          Name: Multi
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/Group
+              Displays:
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_vins/robot
+                  Name: Robot VINS
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Axes Length: 0.5
+                  Axes Radius: 0.05
+                  Class: rviz/Pose
+                  Color: 255; 25; 0
+                  Enabled: true
+                  Head Length: 0.3
+                  Head Radius: 0.1
+                  Name: Pose VINS
+                  Shaft Length: 1
+                  Shaft Radius: 0.05
+                  Shape: Axes
+                  Topic: /odom_visualization_vins/pose
+                  Value: true
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_vins/velocity
+                  Name: Velocity VINS
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Buffer Length: 1
+                  Class: rviz/Path
+                  Color: 255; 0; 0
+                  Enabled: false
+                  Line Style: Lines
+                  Line Width: 0.03
+                  Name: Path VINS
+                  Offset:
+                    X: 0
+                    Y: 0
+                    Z: 0
+                  Topic: /odom_visualization_vins/path
+                  Value: false
+                - Alpha: 1
+                  Autocompute Intensity Bounds: true
+                  Autocompute Value Bounds:
+                    Max Value: 10
+                    Min Value: -10
+                    Value: true
+                  Axis: Z
+                  Channel Name: intensity
+                  Class: rviz/PointCloud
+                  Color: 255; 0; 0
+                  Color Transformer: FlatColor
+                  Decay Time: 0
+                  Enabled: true
+                  Invert Rainbow: false
+                  Max Color: 0; 255; 0
+                  Max Intensity: 4096
+                  Min Color: 0; 0; 0
+                  Min Intensity: 0
+                  Name: Cloud VINS
+                  Position Transformer: XYZ
+                  Queue Size: 10
+                  Selectable: true
+                  Size (Pixels): 3
+                  Size (m): 0.1
+                  Style: Spheres
+                  Topic: /monocular_vins_estimator/cloud
+                  Use Fixed Frame: true
+                  Use rainbow: true
+                  Value: true
+                - Arrow Length: 0.3
+                  Class: rviz/PoseArray
+                  Color: 255; 0; 0
+                  Enabled: true
+                  Name: Poses VINS
+                  Topic: /monocular_vins_estimator/poses
+                  Value: true
+              Enabled: true
+              Name: VINS
+            - Class: rviz/Group
+              Displays:
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_nonlinear/robot
+                  Name: Robot Nonlinear
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Axes Length: 0.5
+                  Axes Radius: 0.05
+                  Class: rviz/Pose
+                  Color: 255; 25; 0
+                  Enabled: true
+                  Head Length: 0.3
+                  Head Radius: 0.1
+                  Name: Pose Nonlinear
+                  Shaft Length: 1
+                  Shaft Radius: 0.05
+                  Shape: Axes
+                  Topic: /odom_visualization_nonlinear/pose
+                  Value: true
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_nonlinear/velocity
+                  Name: Velocity Nonlinear
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Buffer Length: 1
+                  Class: rviz/Path
+                  Color: 0; 255; 0
+                  Enabled: true
+                  Line Style: Lines
+                  Line Width: 0.03
+                  Name: Path
+                  Offset:
+                    X: 0
+                    Y: 0
+                    Z: 0
+                  Topic: /odom_visualization_nonlinear/path
+                  Value: true
+                - Alpha: 1
+                  Autocompute Intensity Bounds: true
+                  Autocompute Value Bounds:
+                    Max Value: 10
+                    Min Value: -10
+                    Value: true
+                  Axis: Z
+                  Channel Name: intensity
+                  Class: rviz/PointCloud
+                  Color: 0; 255; 0
+                  Color Transformer: FlatColor
+                  Decay Time: 0
+                  Enabled: true
+                  Invert Rainbow: false
+                  Max Color: 255; 255; 255
+                  Max Intensity: 4096
+                  Min Color: 0; 0; 0
+                  Min Intensity: 0
+                  Name: Cloud Nonlinear
+                  Position Transformer: XYZ
+                  Queue Size: 10
+                  Selectable: true
+                  Size (Pixels): 3
+                  Size (m): 0.1
+                  Style: Spheres
+                  Topic: /monocular_vins_estimator/cloud_nonlinear
+                  Use Fixed Frame: true
+                  Use rainbow: true
+                  Value: true
+                - Arrow Length: 0.3
+                  Class: rviz/PoseArray
+                  Color: 0; 255; 0
+                  Enabled: true
+                  Name: Poses Nonlinear
+                  Topic: /monocular_vins_estimator/poses_nonlinear
+                  Value: true
+              Enabled: true
+              Name: Nonlinear
+            - Class: rviz/Group
+              Displays:
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_imu/robot
+                  Name: Robot IMU
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Axes Length: 0.5
+                  Axes Radius: 0.05
+                  Class: rviz/Pose
+                  Color: 255; 25; 0
+                  Enabled: false
+                  Head Length: 0.3
+                  Head Radius: 0.1
+                  Name: Pose IMU
+                  Shaft Length: 1
+                  Shaft Radius: 0.05
+                  Shape: Axes
+                  Topic: /odom_visualization_imu/pose
+                  Value: false
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_imu/velocity
+                  Name: Velocity IMU
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Buffer Length: 1
+                  Class: rviz/Path
+                  Color: 255; 255; 0
+                  Enabled: false
+                  Line Style: Lines
+                  Line Width: 0.03
+                  Name: Path IMU
+                  Offset:
+                    X: 0
+                    Y: 0
+                    Z: 0
+                  Topic: /odom_visualization_imu/path
+                  Value: false
+              Enabled: false
+              Name: IMU
+            - Class: rviz/Group
+              Displays:
+                - Class: rviz/Marker
+                  Enabled: true
+                  Marker Topic: /odom_visualization_control/robot
+                  Name: Robot Control
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: true
+                - Alpha: 1
+                  Axes Length: 0.75
+                  Axes Radius: 0.075
+                  Class: rviz/Pose
+                  Color: 0; 0; 255
+                  Enabled: false
+                  Head Length: 0.3
+                  Head Radius: 0.1
+                  Name: Pose Control
+                  Shaft Length: 0.5
+                  Shaft Radius: 0.05
+                  Shape: Axes
+                  Topic: /odom_visualization_control/pose
+                  Value: false
+                - Class: rviz/Marker
+                  Enabled: false
+                  Marker Topic: /odom_visualization_control/velocity
+                  Name: Velocity Control
+                  Namespaces:
+                    {}
+                  Queue Size: 100
+                  Value: false
+                - Alpha: 1
+                  Buffer Length: 1
+                  Class: rviz/Path
+                  Color: 0; 0; 255
+                  Enabled: false
+                  Line Style: Lines
+                  Line Width: 0.03
+                  Name: Path Control
+                  Offset:
+                    X: 0
+                    Y: 0
+                    Z: 0
+                  Topic: /odom_visualization_control/path
+                  Value: false
+              Enabled: false
+              Name: Control
+          Enabled: true
+          Name: VINS
+      Enabled: true
+      Name: NUC
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /irobot/irobot_marker
+      Name: Marker
+      Namespaces:
+        {}
+      Queue Size: 100
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 61; 61; 61
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/MoveCamera
+    - Class: rviz_plugins/Goal3DTool
+      Topic: goal
+    - Class: rviz/SetInitialPose
+      Topic: trigger
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 0.0262036
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.06
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 4.92202
+        Y: -11.2494
+        Z: 11.5579
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 0.674797
+      Target Frame: <Fixed Frame>
+      Value: Orbit (rviz)
+      Yaw: 4.72857
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 744
+  Hide Left Dock: false
+  Hide Right Dock: false
+  QMainWindow State: 000000ff00000000fd000000010000000000000190000002a2fc020000000ffb0000000a0049006d0061006700650000000041000001760000000000000000fb000000100044006900730070006c0061007900730100000028000002a2000000dd00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007300000001c5000000810000006400fffffffb0000000a0049006d00610067006501000001fc0000011d0000000000000000fb0000000a0049006d0061006700650100000154000000e90000000000000000fb0000000a0049006d0061006700650100000211000001080000000000000000fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000041000004f40000006400fffffffb000000100044006900730070006c0061007900730100000041000002d80000000000000000fb0000000a0049006d00610067006501000001db0000013e0000000000000000fb0000000a0049006d0061006700650100000186000001930000000000000000fb0000000a00560069006500770073000000017c0000019d000000b000fffffffb0000000a0049006d00610067006501000001da0000013f0000000000000000fb0000000a0049006d006100670065010000027d0000009c0000000000000000fb0000000a0049006d00610067006501000001d2000001470000000000000000fb0000000a0049006d00610067006501000001af0000016a000000000000000000000383000002a200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1305
+  X: 61
+  Y: 24

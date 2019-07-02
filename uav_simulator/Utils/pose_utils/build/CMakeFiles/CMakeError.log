@@ -1,0 +1,57 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3442518191/fast"
+make[1]: Entering directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3442518191.dir/build.make CMakeFiles/cmTryCompileExec3442518191.dir/build
+make[2]: Entering directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3442518191.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTryCompileExec3442518191.dir/CheckSymbolExists.c.o   -c /home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTryCompileExec3442518191
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3442518191.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTryCompileExec3442518191.dir/CheckSymbolExists.c.o  -o cmTryCompileExec3442518191 -rdynamic 
+CMakeFiles/cmTryCompileExec3442518191.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTryCompileExec3442518191] Error 1
+make[2]: Leaving directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTryCompileExec3442518191/fast] Error 2
+
+File /home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/make "cmTryCompileExec3140407969/fast"
+make[1]: Entering directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTryCompileExec3140407969.dir/build.make CMakeFiles/cmTryCompileExec3140407969.dir/build
+make[2]: Entering directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building C object CMakeFiles/cmTryCompileExec3140407969.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTryCompileExec3140407969.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-2.8/Modules/CheckFunctionExists.c
+Linking C executable cmTryCompileExec3140407969
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTryCompileExec3140407969.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTryCompileExec3140407969.dir/CheckFunctionExists.c.o  -o cmTryCompileExec3140407969 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[2]: *** [cmTryCompileExec3140407969] Error 1
+make[2]: Leaving directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+make[1]: *** [cmTryCompileExec3140407969/fast] Error 2
+make[1]: Leaving directory `/home/jchen/workspace/src/pose_utils/build/CMakeFiles/CMakeTmp'
+
+

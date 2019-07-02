@@ -1,0 +1,69 @@
+<launch>  
+   <!-- Simulator -->
+   <node pkg="so3_quadrotor_simulator"
+         type="quadrotor_simulator_so3"
+         name="quadrotor_simulator_so3"
+         output="screen">
+     <param name="rate/odom" value="100.0"/>
+
+     <param name="simulator/init_state_x" value="-5.0"/>
+     <param name="simulator/init_state_y" value=" 0.0"/>
+     <param name="simulator/init_state_z" value=" 3"/>
+     <remap from="~odom" to="/visual_slam/odom"/>
+     <remap from="~cmd" to="so3_cmd"/>
+     <remap from="~imu" to="sim/imu"/>
+     <remap from="~force_disturbance" to="force_disturbance"/>    
+     <remap from="~moment_disturbance" to="moment_disturbance"/>        
+   </node>
+ 
+   <!-- Controller -->  
+   <node pkg="nodelet"
+     type="nodelet"
+     args="standalone so3_control/SO3ControlNodelet"
+     name="so3_control"
+     required="true"
+     output="screen">
+     <remap from="~odom" to="/state_ukf/odom"/>
+     <remap from="~position_cmd" to="position_cmd"/>
+     <remap from="~motors" to="motors"/>
+     <remap from="~corrections" to="corrections"/>
+     <remap from="~so3_cmd" to="so3_cmd"/>
+     <remap from="~imu" to="sim/imu"/>
+     <rosparam file="$(find so3_control)/config/gains_hummingbird.yaml"/>
+     <rosparam file="$(find so3_control)/config/corrections_hummingbird.yaml"/>
+     <param name="mass" value="0.98"/>
+     <param name="use_angle_corrections " value="false"/>
+     <param name="use_external_yaw "      value="false"/>
+     <param name="gains/rot/z" value="1.0"/>    
+     <param name="gains/ang/z" value="0.1"/>        
+   </node>  
+ 
+   <node pkg="so3_disturbance_generator"
+         name="so3_disturbance_generator"
+         type="so3_disturbance_generator"       
+         output="screen">
+     <remap from="~odom" to="/visual_slam/odom"/>              <!-- Ground Truth & Fake VSLAM Odom -->
+     <remap from="~noisy_odom" to="/state_ukf/odom"/>          <!-- Fake VINS Odom                 -->
+     <remap from="~correction" to="/visual_slam/correction"/>  <!-- Fake VSLAM Correction          -->   
+     <remap from="~force_disturbance" to="force_disturbance"/>        
+     <remap from="~moment_disturbance" to="moment_disturbance"/>            
+   </node>
+ 
+   <!-- Visualization -->
+   <node pkg="odom_visualization"
+         name="odom_visualization_ukf"
+         type="odom_visualization"       
+         output="screen">
+     <remap from="~odom" to="/visual_slam/odom"/>
+     <param name="color/a" value="0.8"/>    
+     <param name="color/r" value="1.0"/>        
+     <param name="color/g" value="0.0"/>        
+     <param name="color/b" value="0.0"/>       
+     <param name="covariance_scale" value="100.0"/>       
+   </node>
+
+   <node name="rviz" pkg="rviz" type="rviz"
+      args="-d $(find so3_quadrotor_simulator)/config/rviz.rviz"
+      />
+ </launch>
+

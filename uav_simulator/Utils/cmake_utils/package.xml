@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package  format="2">
+  <name>cmake_utils</name>
+  <version>0.0.0</version>
+  <description>
+  Once you used this package,
+  then you do not need to copy cmake files among packages
+  </description>
+
+  <maintainer email="william.wu@dji.com"> William.Wu </maintainer>
+
+  <license>LGPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>cmake_modules</depend>
+
+</package>

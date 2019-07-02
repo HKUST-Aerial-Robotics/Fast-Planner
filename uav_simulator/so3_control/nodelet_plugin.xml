@@ -1,0 +1,7 @@
+<library path="lib/libso3_control_nodelet">
+  <class name="so3_control/SO3ControlNodelet" type="SO3ControlNodelet" base_class_type="nodelet::Nodelet">
+    <description>
+      so3_control
+    </description>
+  </class>
+</library>

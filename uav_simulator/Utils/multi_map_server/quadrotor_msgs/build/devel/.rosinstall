@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/jchen/workspace/src/quadrotor_msgs/build/devel/setup.sh

@@ -1,0 +1,6 @@
+# Vision Gain for Hummingbird
+gains:
+  pos: {x: 2.0, y: 2.0, z: 3.5}
+  vel: {x: 1.8, y: 1.8, z: 2.0}
+  rot: {x: 1.0, y: 1.0, z: 0.3}
+  ang: {x: 0.07, y: 0.07, z: 0.02}  

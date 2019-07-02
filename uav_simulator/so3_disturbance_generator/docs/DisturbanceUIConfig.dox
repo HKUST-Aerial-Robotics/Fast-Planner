@@ -1,0 +1,26 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~fxy" : \b [double] Force XY min: -1.0, default: 0.0, max: 1.0
+- \b "~stdfxy" : \b [double] Std Force XY min: 0.0, default: 0.0, max: 1.0
+- \b "~fz" : \b [double] Force Z min: -1.0, default: 0.0, max: 1.0
+- \b "~stdfz" : \b [double] Std Force Z min: 0.0, default: 0.0, max: 1.0
+- \b "~mrp" : \b [double] Moment Roll/Pitch min: -0.1, default: 0.0, max: 0.1
+- \b "~stdmrp" : \b [double] Std Moment Roll/Pitch min: 0.0, default: 0.0, max: 0.1
+- \b "~myaw" : \b [double] Moment Yaw min: -0.1, default: 0.0, max: 0.1
+- \b "~stdmyaw" : \b [double] Std Moment Yaw min: 0.0, default: 0.0, max: 0.1
+- \b "~enable_noisy_odom" : \b [bool] Enable Noisy Odometry min: False, default: False, max: True
+- \b "~stdxyz" : \b [double] Std Noise XYZ min: 0.0, default: 0.0, max: 1.0
+- \b "~stdvxyz" : \b [double] Std Noise Vel XYZ min: 0.0, default: 0.0, max: 1.0
+- \b "~stdrp" : \b [double] Std Noise Roll/Pitch min: 0.0, default: 0.0, max: 0.1
+- \b "~stdyaw" : \b [double] Std Noise Yaw min: 0.0, default: 0.0, max: 0.1
+- \b "~enable_drift_odom" : \b [bool] Enable Drift Odometry min: False, default: True, max: True
+- \b "~stdvdriftxyz" : \b [double] Std Noise Vel Drift XYZ min: 0.0, default: 0.0, max: 0.5
+- \b "~stdvdriftyaw" : \b [double] Std Noise Vel Drift Yaw min: 0.0, default: 0.0, max: 0.5
+- \b "~vdriftx" : \b [double] Vel Drift X min: -0.2, default: 0.0, max: 0.2
+- \b "~vdrifty" : \b [double] Vel Drift Y min: -0.2, default: 0.0, max: 0.2
+- \b "~vdriftz" : \b [double] Vel Drift Z min: -0.2, default: 0.0, max: 0.2
+- \b "~vdriftyaw" : \b [double] Vel Drift Yaw min: -0.1, default: 0.0, max: 0.1
+- \b "~place_holder" : \b [bool] ------------------------------------------------------------------------------- min: False, default: True, max: True
+

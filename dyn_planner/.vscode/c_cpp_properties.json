@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ros/kinetic/include",
+                "/usr/include/eigen3",
+                "/home/bzhouai/workspaces/plan_ws/devel/include/quadrotor_msgs/",
+                "/home/bzhouai/workspaces/plan_ws/devel/include",
+                "/usr/include/pcl-1.7",
+                "${workspaceFolder}/plan_env/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

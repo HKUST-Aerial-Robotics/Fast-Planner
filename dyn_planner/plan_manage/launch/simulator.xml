@@ -18,7 +18,7 @@
     <param name="map/obs_num"    value="150"/>        
     <param name="map/resolution" value="0.2"/>        
     <param name="ObstacleShape/lower_rad" value="0.5"/>
-    <param name="ObstacleShape/upper_rad" value="2.0"/>
+    <param name="ObstacleShape/upper_rad" value="1.5"/>
     <param name="ObstacleShape/lower_hei" value="0.0"/>
     <param name="ObstacleShape/upper_hei" value="5.0"/>        
     <param name="sensing/radius" value="15.0"/>        

@@ -63,7 +63,7 @@
     <param name="search/max_vel" value="$(arg max_vel)" type="double"/>
     <param name="search/max_acc" value="$(arg max_acc)" type="double"/>
     <param name="search/w_time" value="15.0" type="double"/>
-    <param name="search/horizon" value="7.0" type="double"/>
+    <param name="search/horizon" value="9.0" type="double"/>
     <param name="search/lambda_heu" value="5.0" type="double"/>
     <param name="search/resolution_astar" value="0.1" type="double"/>
     <param name="search/time_resolution" value="0.8" type="double"/>

@@ -20,7 +20,7 @@ high-quality trajectories within a few milliseconds and that it can generate agg
 
 __Authors__: [Boyu Zhou](https://github.com/ZbyLGsc), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
 
-This package contains the implementation of __Fast-Planner__ (in folder __dyn_planner__) and a light weight
+This package contains the implementation of __Fast-Planner__ (in folder __dyn_planner__) and a lightweight
 quadrotor simulator (in __uav_simulator__).
 
 If you use __Fast-Planner__ for your application or research, please cite our related papers.
@@ -59,7 +59,9 @@ Then run the quadrotor simulator and __Fast-Planner__:
   roslaunch plan_manage simulation.launch
 ```
 
-Normally, you will find the randomly generated map and the drone model in ```Rviz```. At this time, you can select a goal for the drone using the ```3D Nav Goal```(__click__ and __hold__ both the left and right mouse buttons to select _(x,y)_, and __move__ the mouse to change _z_). When a goal is set, a new trajectory will be generated immediately and executed by the drone, as displayed below:
+Normally, you will find the randomly generated map and the drone model in ```Rviz```. At this time, you can select a goal for the drone using the ```3D Nav Goal``` tool.
+
+In the tools panel of Rviz, click '+' and select the plugin 'Goal3DTool'. If you have successfully compiled all packages from __uav_simulator__, now you can see '3D Nav Goal' in the tools panel. To set a goal, click the '3D Nav Goal' (shortcut keyboard 'g', may conflict with 2D Nav Goal). Then __click__ and __hold__ both the left and right mouse buttons to select _(x,y)_, and __move__ the mouse to change _z_. When a goal is set successfully, a new trajectory will be generated immediately and executed by the drone, as displayed below:
 
 <!-- add some gif here -->
  <p align="center">

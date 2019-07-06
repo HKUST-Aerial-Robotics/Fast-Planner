@@ -2,9 +2,12 @@
 
 __Fast-Planner__ is a quadrotor trajectory generator for fast autonomous flight. It consists of 
 the front-end _kinodynamic path searching_, the back-end _gradient-based Bspline trajectory optimization_ and the postprocessing named as _iterative time adjustment_. The key features of the planner are that it generates
-high-quality trajectories within a few milliseconds and that it can generate aggressive motion under the premise of dynamic feasibility. For more details, we refer the users to the related paper and video:
+high-quality trajectories within a few milliseconds and that it can generate aggressive motion under the premise of dynamic feasibility. 
 
-- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://arxiv.org/abs/1907.01531), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (RA-L), 2019.
+__Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
+
+__Video__:
+
 <p align="center">
   <a href="https://youtu.be/XxBw2nmL8t0" target="_blank"><img src="img/title.png" alt="video" width="640" height="360" border="1" /></a>
 </p>
@@ -18,12 +21,12 @@ high-quality trajectories within a few milliseconds and that it can generate agg
   <img src="img/exp2.gif" width = "420" height = "237"/>
 </p>
 
-__Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
-
 This package contains the implementation of __Fast-Planner__ (in folder __dyn_planner__) and a lightweight
 quadrotor simulator (in __uav_simulator__).
 
-If you use __Fast-Planner__ for your application or research, please cite our related papers.
+If you use __Fast-Planner__ for your application or research, please cite our related papers:
+
+- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://arxiv.org/abs/1907.01531), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (RA-L), 2019.
 
 ## 1. Prerequisites
 

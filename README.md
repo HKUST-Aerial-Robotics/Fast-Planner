@@ -18,7 +18,7 @@ high-quality trajectories within a few milliseconds and that it can generate agg
   <img src="img/exp2.gif" width = "420" height = "237"/>
 </p>
 
-__Authors__: [Boyu Zhou](https://http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
+__Authors__: [Boyu Zhou](https://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
 
 This package contains the implementation of __Fast-Planner__ (in folder __dyn_planner__) and a lightweight
 quadrotor simulator (in __uav_simulator__).

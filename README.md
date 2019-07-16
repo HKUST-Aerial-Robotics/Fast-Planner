@@ -2,7 +2,9 @@
 
 __Fast-Planner__ is a quadrotor trajectory generator for fast autonomous flight. It consists of 
 the front-end _kinodynamic path searching_, the back-end _gradient-based Bspline trajectory optimization_ and the postprocessing named as _iterative time adjustment_. The key features of the planner are that it generates
-high-quality trajectories within a few milliseconds and that it can generate aggressive motion under the premise of dynamic feasibility. 
+high-quality trajectories within a few milliseconds and that it can generate aggressive motion under the premise of dynamic feasibility.
+
+This package is under active maintenance. More features (e.g., avoiding dynamic obstacles, discovering topological distinctive trajectories) will be added in the future.
 
 __Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
 

@@ -34,6 +34,8 @@ If you use __Fast-Planner__ for your application or research, please cite our re
 
 - We use [**NLopt**](https://nlopt.readthedocs.io/en/latest/NLopt_Installation) to solve the non-linear optimization problem.
 
+- The drone simulator depends on the C++ linear algebra library __Armadillo__, which can be installed by ``` sudo apt-get install libarmadillo-dev ```.
+
 ## 2. Build on ROS
 
 Clone this repository to your catkin workspace and catkin_make. A new workspace is recommended:

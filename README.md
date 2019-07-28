@@ -10,10 +10,6 @@ __Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) an
 
 __Video__:
 
-<p align="center">
-  <a href="https://youtu.be/XxBw2nmL8t0" target="_blank"><img src="img/title.png" alt="video" width="640" height="360" border="1" /></a>
-</p>
-
 <!-- add some gif of the paper video: -->
 <p align="center">
   <img src="img/exp1.gif" width = "420" height = "237"/>
@@ -23,12 +19,24 @@ __Video__:
   <img src="img/exp2.gif" width = "420" height = "237"/>
 </p>
 
+<p align="center">
+  <a href="https://youtu.be/XxBw2nmL8t0" target="_blank"><img src="img/title.png" alt="video" width="480" height="270" border="1" /></a>
+</p>
+
 This package contains the implementation of __Fast-Planner__ (in folder __dyn_planner__) and a lightweight
 quadrotor simulator (in __uav_simulator__).
 
 If you use __Fast-Planner__ for your application or research, please cite our related papers:
 
-- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://arxiv.org/abs/1907.01531), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (RA-L), 2019.
+- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (RA-L), 2019.
+```
+@article{zhou2019robust,
+  title={Robust and efficient quadrotor trajectory generation for fast autonomous flight},
+  author={Zhou, Boyu and Gao, Fei and Wang, Luqi and Liu, Chuhao and Shen, Shaojie},
+  journal={arXiv preprint arXiv:1907.01531},
+  year={2019}
+}
+```
 
 ## 1. Prerequisites
 

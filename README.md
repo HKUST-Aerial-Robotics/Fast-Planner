@@ -2,7 +2,7 @@
 
 __Fast-Planner__ is a quadrotor trajectory generator for fast autonomous flight. It consists of 
 the front-end _kinodynamic path searching_, the back-end _gradient-based Bspline trajectory optimization_ and the postprocessing named as _iterative time adjustment_. The key features of the planner are that it generates
-high-quality trajectories within a few milliseconds and that it can generate aggressive motion under the premise of dynamic feasibility.
+high-quality trajectories within a few milliseconds and that it can generate aggressive motion under the premise of dynamic feasibility. This work was reported on the [IEEE Spectrum](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot).
 
 This package is under active maintenance. More features (e.g., avoiding dynamic obstacles, discovering topological distinctive trajectories) will be added in the future.
 

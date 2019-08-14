@@ -33,8 +33,12 @@ If you use __Fast-Planner__ for your application or research, please cite our re
 @article{zhou2019robust,
   title={Robust and efficient quadrotor trajectory generation for fast autonomous flight},
   author={Zhou, Boyu and Gao, Fei and Wang, Luqi and Liu, Chuhao and Shen, Shaojie},
-  journal={arXiv preprint arXiv:1907.01531},
-  year={2019}
+  journal={IEEE Robotics and Automation Letters},
+  volume={4},
+  number={4},
+  pages={3529--3536},
+  year={2019},
+  publisher={IEEE}
 }
 ```
 

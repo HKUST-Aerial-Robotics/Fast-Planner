@@ -79,7 +79,6 @@ target_link_libraries(${PROJECT_NAME}
     ${catkin_LIBRARIES}
     ${QT_LIBRARIES}
     )
-
 install(TARGETS
   ${PROJECT_NAME}
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

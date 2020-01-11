@@ -170,7 +170,7 @@ void goal_callback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
     } else if (waypoint_type == string("series")) {
         load_waypoints(n, trigged_time);
     } else if (waypoint_type == string("manual-lonely-waypoint")) {
-        if (msg->pose.position.z > 0) {
+        if (msg->pose.position.z > -0.1) {
             // if height > 0, it's a valid goal;
             geometry_msgs::PoseStamped pt = *msg;
             waypoints.poses.clear();

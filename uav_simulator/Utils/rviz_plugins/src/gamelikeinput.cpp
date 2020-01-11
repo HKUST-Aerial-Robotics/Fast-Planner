@@ -11,7 +11,7 @@
 #include "rviz/viewport_mouse_event.h"
 #undef private
 
-#include "gamelikeinput.hpp"
+// #include "gamelikeinput.hpp"
 
 #include "rviz/default_plugin/tools/move_tool.h"
 #include "rviz/display_context.h"
@@ -37,7 +37,7 @@
 #include "rviz/properties/string_property.h"
 
 #include "nav_msgs/Path.h"
-#include "quadrotor_msgs/SwarmCommand.h"
+// #include "quadrotor_msgs/SwarmCommand.h"
 #include "std_msgs/Int32MultiArray.h"
 
 //! @todo rewrite this grabage code

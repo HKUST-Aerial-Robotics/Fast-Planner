@@ -1,2 +1,0 @@
-# dyn_planner
-

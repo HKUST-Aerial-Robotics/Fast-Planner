@@ -1,0 +1,113 @@
+<launch>
+  <arg name="init_x" value="-19.0"/>
+  <arg name="init_y" value="0.0"/>
+  <arg name="init_z" value="1.0"/> 
+  <arg name="obj_num" value="1" />
+  <arg name="map_size_x_"/>
+  <arg name="map_size_y_"/>
+  <arg name="map_size_z_"/>
+  <arg name="odometry_topic" />
+
+  <!-- map generation -->
+  <node pkg ="map_generator" name ="random_forest" type ="random_forest" output = "screen">    
+    <remap from="~odometry"   to="$(arg odometry_topic)"/>    
+    <param name="init_state_x"   value="$(arg init_x)"/>
+    <param name="init_state_y"   value="$(arg init_y)"/>
+    <param name="map/x_size"     value="$(arg map_size_x_)" />
+    <param name="map/y_size"     value="$(arg map_size_y_)" />
+    <param name="map/z_size"     value="$(arg map_size_z_)" />
+    <param name="map/resolution" value="0.1"/>        
+
+    <!-- pilar shape obstacle -->
+    <param name="map/obs_num"    value="180"/>
+    <param name="ObstacleShape/lower_rad" value="0.59"/>
+    <param name="ObstacleShape/upper_rad" value="0.7"/>
+    <param name="ObstacleShape/lower_hei" value="0.0"/>
+    <param name="ObstacleShape/upper_hei" value="5.0"/>        
+
+    <!-- circle shape obstacle -->
+    <param name="map/circle_num" value="1"/>        
+    <param name="ObstacleShape/radius_l" value="0.7"/>        
+    <param name="ObstacleShape/radius_h" value="0.8"/>        
+    <param name="ObstacleShape/z_l" value="0.7"/>        
+    <param name="ObstacleShape/z_h" value="0.8"/>        
+    <param name="ObstacleShape/theta" value="0.5"/>        
+    <param name="sensing/radius" value="5.0"/>        
+    <param name="sensing/rate"   value="10.0"/>         
+  </node>
+
+  <!-- dynamic object generation -->
+  <!-- <node pkg="plan_env" name="obj_generator" type="obj_generator" output="screen">
+    <param name="obj_generator/obj_num" value="$(arg obj_num)" type="int"/>
+    <param name="obj_generator/xy_size" value="10.0" type="double"/>
+    <param name="obj_generator/h_size" value="1.0" type="double"/>
+    <param name="obj_generator/vel" value="1.01" type="double"/>
+    <param name="obj_generator/yaw_dot" value="1.57" type="double"/>
+    <param name="obj_generator/acc_r1" value="1.01" type="double"/>
+    <param name="obj_generator/acc_r2" value="2.01" type="double"/>
+    <param name="obj_generator/acc_z" value="1.01" type="double"/>
+    <param name="obj_generator/scale1" value="2.0" type="double"/>
+    <param name="obj_generator/scale2" value="2.5" type="double"/>
+    <param name="obj_generator/interval" value="50.0" type="double"/>
+  </node> -->
+
+  <node pkg="so3_quadrotor_simulator" type="quadrotor_simulator_so3" name="quadrotor_simulator_so3" output="screen">
+        <param name="rate/odom" value="200.0"/>
+        <param name="simulator/init_state_x" value="$(arg init_x)"/>
+        <param name="simulator/init_state_y" value="$(arg init_y)"/>
+        <param name="simulator/init_state_z" value="$(arg init_z)"/>
+
+        <remap from="~odom" to="/visual_slam/odom"/>
+        <remap from="~cmd" to="so3_cmd"/>
+        <remap from="~force_disturbance" to="force_disturbance"/>    
+        <remap from="~moment_disturbance" to="moment_disturbance"/>        
+  </node>
+ 
+  <node pkg="nodelet" type="nodelet" args="standalone so3_control/SO3ControlNodelet" name="so3_control" required="true" output="screen">
+        <remap from="~odom" to="/state_ukf/odom"/>
+        <remap from="~position_cmd" to="/planning/pos_cmd"/>
+        <remap from="~motors" to="motors"/>
+        <remap from="~corrections" to="corrections"/>
+        <remap from="~so3_cmd" to="so3_cmd"/>
+        <rosparam file="$(find so3_control)/config/gains_hummingbird.yaml"/>
+        <rosparam file="$(find so3_control)/config/corrections_hummingbird.yaml"/>
+        <param name="mass" value="0.74"/>
+        <param name="use_angle_corrections " value="false"/>
+        <param name="use_external_yaw "      value="false"/>
+        <param name="gains/rot/z" value="1.0"/>    
+        <param name="gains/ang/z" value="0.1"/>        
+  </node>  
+ 
+  <node pkg="so3_disturbance_generator" name="so3_disturbance_generator" type="so3_disturbance_generator" output="screen">
+        <remap from="~odom" to="/visual_slam/odom"/>             
+        <remap from="~noisy_odom" to="/state_ukf/odom"/>          
+        <remap from="~correction" to="/visual_slam/correction"/>   
+        <remap from="~force_disturbance" to="force_disturbance"/>        
+        <remap from="~moment_disturbance" to="moment_disturbance"/>            
+  </node> 
+ 
+  <node pkg="odom_visualization" name="odom_visualization" type="odom_visualization" output="screen">
+        <remap from="~odom" to="/visual_slam/odom"/>
+        <param name="color/a" value="1.0"/>    
+        <param name="color/r" value="0.0"/>        
+        <param name="color/g" value="0.0"/>        
+        <param name="color/b" value="1.0"/>       
+        <param name="covariance_scale" value="100.0"/>       
+        <param name="robot_scale" value="1.0"/>
+  </node>
+
+  <node pkg="local_sensing_node" type="pcl_render_node" name="pcl_render_node" output="screen">
+        <rosparam command="load" file="$(find local_sensing_node)/params/camera.yaml" />
+
+        <param name="sensing_horizon"  value="5.0" />
+        <param name="sensing_rate"     value="30.0"/>
+        <param name="estimation_rate"  value="30.0"/>
+        <param name="map/x_size"     value="$(arg map_size_x_)"/>
+        <param name="map/y_size"     value="$(arg map_size_y_)"/>
+        <param name="map/z_size"     value="$(arg map_size_z_)"/>
+
+        <remap from="~global_map" to="/map_generator/global_cloud"/>
+        <remap from="~odometry"   to="$(arg odometry_topic)"/>
+  </node>
+
+</launch>

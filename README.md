@@ -41,9 +41,21 @@ quadrotor simulator (in __uav_simulator__). Key components are:
 - __bspline_opt__: The gradient-based trajectory optimization based on B-spline trajectory representation.
 - __plan_manage__: High-level modules that schedule and call the mapping and planning algorithms. Interfaces for launching the whole system, as well as the configuration files are contained here.
 
-If you use __Fast-Planner__ for your application or research, please cite our [related papers](files/bib.txt):
+If you use __Fast-Planner__ for your application or research, please cite our related paper:
 
 - [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (RA-L), 2019.
+```
+@article{zhou2019robust,
+  title={Robust and efficient quadrotor trajectory generation for fast autonomous flight},
+  author={Zhou, Boyu and Gao, Fei and Wang, Luqi and Liu, Chuhao and Shen, Shaojie},
+  journal={IEEE Robotics and Automation Letters},
+  volume={4},
+  number={4},
+  pages={3529--3536},
+  year={2019},
+  publisher={IEEE}
+}
+```
 
 
 ## 1. Prerequisites

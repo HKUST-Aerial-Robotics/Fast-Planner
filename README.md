@@ -4,7 +4,7 @@
 
 This package is under active maintenance. New features will be listed here.
 
-- The online mapping algorithm is now available. It can take in depth image and camera pose pairs as input, do raycasting to update a probabilistic volumetric map, and build a Euclidean signed distance filed (ESDF) for the planning system.
+- The online mapping algorithm is now available. It can take in depth image and camera pose pairs as input, do raycasting to update a probabilistic volumetric map, and build a Euclidean signed distance field (ESDF) for the planning system.
 
 ## Overview
 

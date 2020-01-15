@@ -19,7 +19,7 @@
     <param name="map/resolution" value="0.1"/>        
 
     <!-- pilar shape obstacle -->
-    <param name="map/obs_num"    value="180"/>
+    <param name="map/obs_num"    value="250"/>
     <param name="ObstacleShape/lower_rad" value="0.59"/>
     <param name="ObstacleShape/upper_rad" value="0.7"/>
     <param name="ObstacleShape/lower_hei" value="0.0"/>
@@ -35,21 +35,6 @@
     <param name="sensing/radius" value="5.0"/>        
     <param name="sensing/rate"   value="10.0"/>         
   </node>
-
-  <!-- dynamic object generation -->
-  <!-- <node pkg="plan_env" name="obj_generator" type="obj_generator" output="screen">
-    <param name="obj_generator/obj_num" value="$(arg obj_num)" type="int"/>
-    <param name="obj_generator/xy_size" value="10.0" type="double"/>
-    <param name="obj_generator/h_size" value="1.0" type="double"/>
-    <param name="obj_generator/vel" value="1.01" type="double"/>
-    <param name="obj_generator/yaw_dot" value="1.57" type="double"/>
-    <param name="obj_generator/acc_r1" value="1.01" type="double"/>
-    <param name="obj_generator/acc_r2" value="2.01" type="double"/>
-    <param name="obj_generator/acc_z" value="1.01" type="double"/>
-    <param name="obj_generator/scale1" value="2.0" type="double"/>
-    <param name="obj_generator/scale2" value="2.5" type="double"/>
-    <param name="obj_generator/interval" value="50.0" type="double"/>
-  </node> -->
 
   <node pkg="so3_quadrotor_simulator" type="quadrotor_simulator_so3" name="quadrotor_simulator_so3" output="screen">
         <param name="rate/odom" value="200.0"/>

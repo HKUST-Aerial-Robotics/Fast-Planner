@@ -16,8 +16,9 @@
     <arg name="map_size_z_" value="$(arg map_size_z)"/>
     <arg name="odometry_topic" value="$(arg odom_topic)"/>
 
-    <!-- camera pose and depth topic -->
-    <!-- don't set cloud_topic if you already set this one! -->
+    <!-- camera pose: transform of camera frame in the world frame -->
+    <!-- depth topic: depth image, 640x480 by default -->
+    <!-- don't set cloud_topic if you already set these ones! -->
     <arg name="camera_pose_topic" value="/pcl_render_node/camera_pose"/>
     <arg name="depth_topic" value="/pcl_render_node/depth"/>
 

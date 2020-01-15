@@ -121,7 +121,7 @@ void SDFMap::initMap(ros::NodeHandle& nh) {
         SyncPolicyImageOdom(100), *depth_sub_, *odom_sub_));
     sync_image_odom_->registerCallback(boost::bind(&SDFMap::depthOdomCallback, this, _1, _2));
   }
-  
+
   indep_cloud_sub_ =
       node_.subscribe<sensor_msgs::PointCloud2>("/sdf_map/cloud", 10, &SDFMap::cloudCallback, this);
   indep_odom_sub_ =
@@ -850,6 +850,8 @@ void SDFMap::poseCallback(const geometry_msgs::PoseStampedConstPtr& pose) {
 
 void SDFMap::odomCallback(const nav_msgs::OdometryConstPtr& odom) {
 
+  if (md_.has_first_depth_) return;
+
   md_.camera_pos_(0) = odom->pose.pose.position.x;
   md_.camera_pos_(1) = odom->pose.pose.position.y;
   md_.camera_pos_(2) = odom->pose.pose.position.z;
@@ -948,7 +950,6 @@ void SDFMap::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& img) {
   boundIndex(md_.local_bound_min_);
   boundIndex(md_.local_bound_max_);
 
-  md_.has_first_depth_ = true;
   md_.esdf_need_update_ = true;
 }
 

@@ -126,6 +126,11 @@ Normally, you will find the randomly generated map and the drone model in ```Rvi
 If you have successfully run the simulation and want to use __Fast-Planner__ in your project,
 please explore the simulation.launch file.
 Important parameters that may be changed in your usage are contained and documented.
+
+Note that in our configuration, the size of depth image is 640x480. 
+For higher map fusion efficiency we do downsampling (in kino_algorithm.xml, skip_pixel = 2).
+If you use depth images with lower resolution (like 256x144), you might disable the downsampling by setting skip_pixel = 1. Also, the _depth_scaling_factor_ is set to 1000, which may need to be changed according to your device.
+
 Finally, please kindly give a STAR to this repo if it helps your research or work, thanks! :)
 
 ## 5. Acknowledgements

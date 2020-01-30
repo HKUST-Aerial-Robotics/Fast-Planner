@@ -8,15 +8,20 @@
 using namespace std;
 
 namespace fast_planner {
+
+// An implementation of non-uniform B-spline with different dimensions
+// It also represents uniform B-spline which is a special case of non-uniform
 class NonUniformBspline {
 private:
-  /* non-uniform bspline */
-  int p_, n_, m_;  // p degree, n+1 control points, m = n+p+1
+  // control points for B-spline with different dimensions.
+  // Each row represents one single control point
+  // The dimension is determined by column number
+  // e.g. B-spline with N points in 3D space -> Nx3 matrix
   Eigen::MatrixXd control_points_;
+
+  int p_, n_, m_;      // p degree, n+1 control points, m = n+p+1
   Eigen::VectorXd u_;  // knots vector
   double interval_;    // knot span \delta t
-
-  Eigen::Vector3d x0_, v0_, a0_;
 
   Eigen::MatrixXd getDerivativeControlPoints();
 
@@ -25,52 +30,54 @@ private:
 public:
   NonUniformBspline() {
   }
-  NonUniformBspline(Eigen::MatrixXd points, int order, double interval, bool zero = true);
+  NonUniformBspline(const Eigen::MatrixXd& points, const int& order, const double& interval);
   ~NonUniformBspline();
+
+  // initialize as an uniform B-spline
+  void setUniformBspline(const Eigen::MatrixXd& points, const int& order, const double& interval);
 
   // get / set basic bspline info
 
-  void setKnot(Eigen::VectorXd knot);
+  void setKnot(const Eigen::VectorXd& knot);
   Eigen::VectorXd getKnot();
   Eigen::MatrixXd getControlPoint();
   double getInterval();
   void getTimeSpan(double& um, double& um_p);
+  pair<Eigen::VectorXd, Eigen::VectorXd> getHeadTailPts();
 
   // compute position / derivative
 
-  Eigen::Vector3d evaluateDeBoor(double t);
+  Eigen::VectorXd evaluateDeBoor(const double& u);   // use u \in [up, u_mp]
+  Eigen::VectorXd evaluateDeBoorT(const double& t);  // use t \in [0, duration]
   NonUniformBspline getDerivative();
 
-  // B-spline interpolation of points in point_set, with boundary vel&acc
+  // 3D B-spline interpolation of points in point_set, with boundary vel&acc
   // constraints
+  // input : (K+2) points with boundary vel/acc; ts
+  // output: (K+6) control_pts
   static void parameterizeToBspline(const double& ts, const vector<Eigen::Vector3d>& point_set,
                                     const vector<Eigen::Vector3d>& start_end_derivative,
                                     Eigen::MatrixXd& ctrl_pts);
 
   /* check feasibility, adjust time */
 
-  void setPhysicalLimits(double vel, double acc);
+  void setPhysicalLimits(const double& vel, const double& acc);
   bool checkFeasibility(bool show = false);
   double checkRatio();
-  void lengthenTime(double ratio);
+  void lengthenTime(const double& ratio);
+  bool reallocateTime(bool show = false);
 
   /* for performance evaluation */
 
   double getTimeSum();
-  double getLength(double res = 0.01);
+  double getLength(const double& res = 0.01);
   double getJerk();
-
   void getMeanAndMaxVel(double& mean_v, double& max_v);
   void getMeanAndMaxAcc(double& mean_a, double& max_a);
 
-  // maybe deprecated ?
-
-  bool reallocateTime(bool show = false);
-  bool adjustTime(bool show = false);
-  pair<Eigen::Vector3d, Eigen::Vector3d> getHeadTailPts();
   void recomputeInit();
 
-  // typedef std::shared_ptr<NonUniformBspline> Ptr;
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 }  // namespace fast_planner
 #endif

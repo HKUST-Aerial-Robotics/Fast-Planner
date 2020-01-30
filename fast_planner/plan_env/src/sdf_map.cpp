@@ -5,7 +5,7 @@
 
 void SDFMap::initMap(ros::NodeHandle& nh) {
   node_ = nh;
-
+  
   /* get parameter */
   double x_size, y_size, z_size;
   node_.param("sdf_map/resolution", mp_.resolution_, -1.0);
@@ -121,6 +121,8 @@ void SDFMap::initMap(ros::NodeHandle& nh) {
         SyncPolicyImageOdom(100), *depth_sub_, *odom_sub_));
     sync_image_odom_->registerCallback(boost::bind(&SDFMap::depthOdomCallback, this, _1, _2));
   }
+
+  // use odometry and point cloud
 
   indep_cloud_sub_ =
       node_.subscribe<sensor_msgs::PointCloud2>("/sdf_map/cloud", 10, &SDFMap::cloudCallback, this);
@@ -810,46 +812,16 @@ void SDFMap::depthPoseCallback(const sensor_msgs::ImageConstPtr& img,
   md_.camera_pos_(2) = pose->pose.position.z;
   md_.camera_q_ = Eigen::Quaterniond(pose->pose.orientation.w, pose->pose.orientation.x,
                                      pose->pose.orientation.y, pose->pose.orientation.z);
-
-  md_.has_odom_ = true;
-  md_.update_num_ += 1;
-  md_.occ_need_update_ = true;
-}
-
-void SDFMap::depthOdomCallback(const sensor_msgs::ImageConstPtr& img,
-                               const nav_msgs::OdometryConstPtr& odom) {
-  /* get pose */
-  md_.camera_pos_(0) = odom->pose.pose.position.x;
-  md_.camera_pos_(1) = odom->pose.pose.position.y;
-  md_.camera_pos_(2) = odom->pose.pose.position.z;
-  md_.camera_q_ = Eigen::Quaterniond(odom->pose.pose.orientation.w, odom->pose.pose.orientation.x,
-                                     odom->pose.pose.orientation.y, odom->pose.pose.orientation.z);
-
-  /* get depth image */
-  cv_bridge::CvImagePtr cv_ptr;
-  cv_ptr = cv_bridge::toCvCopy(img, img->encoding);
-  if (img->encoding == sensor_msgs::image_encodings::TYPE_32FC1) {
-    (cv_ptr->image).convertTo(cv_ptr->image, CV_16UC1, mp_.k_depth_scaling_factor_);
+  if (isInMap(md_.camera_pos_)) {
+    md_.has_odom_ = true;
+    md_.update_num_ += 1;
+    md_.occ_need_update_ = true;
+  } else {
+    md_.occ_need_update_ = false;
   }
-  cv_ptr->image.copyTo(md_.depth_image_);
-
-  md_.occ_need_update_ = true;
-}
-
-void SDFMap::depthCallback(const sensor_msgs::ImageConstPtr& img) {
-  std::cout << "depth: " << img->header.stamp << std::endl;
-}
-
-void SDFMap::poseCallback(const geometry_msgs::PoseStampedConstPtr& pose) {
-  std::cout << "pose: " << pose->header.stamp << std::endl;
-
-  md_.camera_pos_(0) = pose->pose.position.x;
-  md_.camera_pos_(1) = pose->pose.position.y;
-  md_.camera_pos_(2) = pose->pose.position.z;
 }
 
 void SDFMap::odomCallback(const nav_msgs::OdometryConstPtr& odom) {
-
   if (md_.has_first_depth_) return;
 
   md_.camera_pos_(0) = odom->pose.pose.position.x;
@@ -924,10 +896,9 @@ void SDFMap::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& img) {
 
             posToIndex(p3d_inf, inf_pt);
 
+            if (!isInMap(inf_pt)) continue;
+
             int idx_inf = toAddress(inf_pt);
-            if (idx_inf < 0 ||
-                idx_inf > mp_.map_voxel_num_(0) * mp_.map_voxel_num_(1) * mp_.map_voxel_num_(2))
-              continue;
 
             md_.occupancy_buffer_inflate_[idx_inf] = 1;
           }
@@ -1178,7 +1149,7 @@ void SDFMap::publishESDF() {
   // ROS_INFO("pub esdf");
 }
 
-void SDFMap::getSliceESDF(const double height, const double res, Eigen::Vector4d range,
+void SDFMap::getSliceESDF(const double height, const double res, const Eigen::Vector4d& range,
                           vector<Eigen::Vector3d>& slice, vector<Eigen::Vector3d>& grad, int sign) {
   double dist;
   Eigen::Vector3d gd;
@@ -1202,7 +1173,6 @@ void SDFMap::checkDist() {
         double dist = getDistWithGradTrilinear(pos, grad);
 
         if (fabs(dist) > 10.0) {
-          // cout << "fuck: " << pos.transpose() << ", " << dist << endl;
         }
       }
 }
@@ -1256,6 +1226,38 @@ void SDFMap::getSurroundPts(const Eigen::Vector3d& pos, Eigen::Vector3d pts[2][2
       }
     }
   }
+}
+
+void SDFMap::depthOdomCallback(const sensor_msgs::ImageConstPtr& img,
+                               const nav_msgs::OdometryConstPtr& odom) {
+  /* get pose */
+  md_.camera_pos_(0) = odom->pose.pose.position.x;
+  md_.camera_pos_(1) = odom->pose.pose.position.y;
+  md_.camera_pos_(2) = odom->pose.pose.position.z;
+  md_.camera_q_ = Eigen::Quaterniond(odom->pose.pose.orientation.w, odom->pose.pose.orientation.x,
+                                     odom->pose.pose.orientation.y, odom->pose.pose.orientation.z);
+
+  /* get depth image */
+  cv_bridge::CvImagePtr cv_ptr;
+  cv_ptr = cv_bridge::toCvCopy(img, img->encoding);
+  if (img->encoding == sensor_msgs::image_encodings::TYPE_32FC1) {
+    (cv_ptr->image).convertTo(cv_ptr->image, CV_16UC1, mp_.k_depth_scaling_factor_);
+  }
+  cv_ptr->image.copyTo(md_.depth_image_);
+
+  md_.occ_need_update_ = true;
+}
+
+void SDFMap::depthCallback(const sensor_msgs::ImageConstPtr& img) {
+  std::cout << "depth: " << img->header.stamp << std::endl;
+}
+
+void SDFMap::poseCallback(const geometry_msgs::PoseStampedConstPtr& pose) {
+  std::cout << "pose: " << pose->header.stamp << std::endl;
+
+  md_.camera_pos_(0) = pose->pose.position.x;
+  md_.camera_pos_(1) = pose->pose.position.y;
+  md_.camera_pos_(2) = pose->pose.position.z;
 }
 
 // SDFMap

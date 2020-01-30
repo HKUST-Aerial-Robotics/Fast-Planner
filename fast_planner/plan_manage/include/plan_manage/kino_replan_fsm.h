@@ -1,5 +1,5 @@
-#ifndef _PLANNING_FSM_KINO_H_
-#define _PLANNING_FSM_KINO_H_
+#ifndef _KINO_REPLAN_FSM_H_
+#define _KINO_REPLAN_FSM_H_
 
 #include <Eigen/Eigen>
 #include <algorithm>
@@ -22,8 +22,29 @@ using std::vector;
 
 namespace fast_planner {
 
+class Test {
+private:
+  /* data */
+  int test_;
+  std::vector<int> test_vec_;
+  ros::NodeHandle nh_;
+
+public:
+  Test(const int& v) {
+    test_ = v;
+  }
+  Test(ros::NodeHandle& node) {
+    nh_ = node;
+  }
+  ~Test() {
+  }
+  void print() {
+    std::cout << "test: " << test_ << std::endl;
+  }
+};
+
 class KinoReplanFSM {
-  
+
 private:
   /* ---------- flag ---------- */
   enum FSM_EXEC_STATE { INIT, WAIT_TARGET, GEN_NEW_TRAJ, REPLAN_TRAJ, EXEC_TRAJ, REPLAN_NEW };
@@ -45,15 +66,17 @@ private:
   int waypoint_num_;
 
   /* planning data */
-  bool trigger_, have_target_;
+  bool trigger_, have_target_, have_odom_;
   FSM_EXEC_STATE exec_state_;
 
-  Eigen::Vector3d start_pt_, start_vel_, start_acc_;  // start state
-  Eigen::Vector3d end_pt_, end_vel_;                  // target state
+  Eigen::Vector3d odom_pos_, odom_vel_;  // odometry state
+  Eigen::Quaterniond odom_orient_;
+
+  Eigen::Vector3d start_pt_, start_vel_, start_acc_, start_yaw_;  // start state
+  Eigen::Vector3d end_pt_, end_vel_;                              // target state
   int current_wp_;
 
   /* ROS utils */
-  nav_msgs::Odometry drone_odometry_;
   ros::NodeHandle node_;
   ros::Timer exec_timer_, safety_timer_, vis_timer_, test_something_timer_;
   ros::Subscriber waypoint_sub_, odom_sub_;
@@ -79,6 +102,8 @@ public:
   }
 
   void init(ros::NodeHandle& nh);
+
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 }  // namespace fast_planner

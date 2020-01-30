@@ -2,6 +2,7 @@
 #define _SDF_MAP_H
 
 #include <Eigen/Eigen>
+#include <Eigen/StdVector>
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <iostream>
@@ -40,7 +41,7 @@ struct MappingParameters {
   double obstacles_inflation_;
   string frame_id_;
   int pose_type_;
-  string map_input_;
+  string map_input_;  // 1: pose+depth; 2: odom + cloud
 
   /* camera parameters */
   double cx_, cy_, fx_, fy_;
@@ -121,7 +122,7 @@ struct MappingData {
   double fuse_time_, esdf_time_, max_fuse_time_, max_esdf_time_;
   int update_num_;
 
-  //
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 class SDFMap {
@@ -164,7 +165,7 @@ public:
   // max_pos);
 
   void updateESDF3d();
-  void getSliceESDF(const double height, const double res, Eigen::Vector4d range,
+  void getSliceESDF(const double height, const double res, const Eigen::Vector4d& range,
                     vector<Eigen::Vector3d>& slice, vector<Eigen::Vector3d>& grad,
                     int sign = 1);  // 1 pos, 2 neg, 3 combined
   void initMap(ros::NodeHandle& nh);
@@ -186,6 +187,8 @@ public:
   int getVoxelNum();
 
   typedef std::shared_ptr<SDFMap> Ptr;
+
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
 private:
   MappingParameters mp_;
@@ -234,6 +237,7 @@ private:
   shared_ptr<message_filters::Subscriber<nav_msgs::Odometry>> odom_sub_;
   SynchronizerImagePose sync_image_pose_;
   SynchronizerImageOdom sync_image_odom_;
+
   ros::Subscriber indep_depth_sub_, indep_odom_sub_, indep_pose_sub_, indep_cloud_sub_;
   ros::Publisher map_pub_, esdf_pub_, map_inf_pub_, update_range_pub_;
   ros::Publisher unknown_pub_, depth_pub_;
@@ -325,7 +329,7 @@ inline double SDFMap::getDistWithGradTrilinear(Eigen::Vector3d pos, Eigen::Vecto
   double v0 = (1 - diff[1]) * v00 + diff[1] * v10;
   double v1 = (1 - diff[1]) * v01 + diff[1] * v11;
   double dist = (1 - diff[2]) * v0 + diff[2] * v1;
-  
+
   grad[2] = (v1 - v0) * mp_.resolution_inv_;
   grad[1] = ((1 - diff[2]) * (v10 - v00) + diff[2] * (v11 - v01)) * mp_.resolution_inv_;
   grad[0] = (1 - diff[2]) * (1 - diff[1]) * (values[1][0][0] - values[0][0][0]);

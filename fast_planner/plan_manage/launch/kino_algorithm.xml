@@ -31,7 +31,6 @@
 
   <!-- main node -->
   <node pkg="plan_manage" name="fast_planner_node" type="fast_planner_node" output="screen">
-  
     <remap from="/odom_world" to="$(arg odometry_topic)"/>
     <remap from="/sdf_map/odom" to="$(arg odometry_topic)"/>
     <remap from="/sdf_map/cloud" to="$(arg cloud_topic)"/>
@@ -105,7 +104,7 @@
     <param name="manager/dynamic_environment" value="0" type="int"/>
     <param name="manager/local_segment_length" value="6.0" type="double"/>
     <param name="manager/clearance_threshold" value="0.2" type="double"/>
-    <param name="manager/control_points_distance" value="0.4" type="double"/>
+    <param name="manager/control_points_distance" value="0.5" type="double"/>
 
     <param name="manager/use_geometric_path" value="false" type="bool"/>
     <param name="manager/use_kinodynamic_path" value="true" type="bool"/>
@@ -114,13 +113,13 @@
     <param name="manager/use_active_perception" value="false" type="bool"/>
 
   <!-- kinodynamic path searching -->
-    <param name="search/max_tau" value="0.8" type="double"/>
+    <param name="search/max_tau" value="0.6" type="double"/>
     <param name="search/init_max_tau" value="0.8" type="double"/>
     <param name="search/max_vel" value="$(arg max_vel)" type="double"/>
     <param name="search/max_acc" value="$(arg max_acc)" type="double"/>
     <param name="search/w_time" value="10.0" type="double"/>
     <param name="search/horizon" value="7.0" type="double"/>
-    <param name="search/lambda_heu" value="10.0" type="double"/>
+    <param name="search/lambda_heu" value="5.0" type="double"/>
     <param name="search/resolution_astar" value="0.1" type="double"/>
     <param name="search/time_resolution" value="0.8" type="double"/>
     <param name="search/margin" value="0.2" type="double"/>
@@ -132,15 +131,24 @@
     <param name="optimization/lambda2" value="0.8" type="double"/>
     <param name="optimization/lambda3" value="0.00001" type="double"/>
     <param name="optimization/lambda4" value="0.01" type="double"/>
+    <param name="optimization/lambda7" value="10.0" type="double"/>
     <param name="optimization/dist0" value="0.7" type="double"/>
     <param name="optimization/max_vel" value="$(arg max_vel)" type="double"/>
     <param name="optimization/max_acc" value="$(arg max_acc)" type="double"/>
 
     <param name="optimization/algorithm1" value="15" type="int"/>
     <param name="optimization/algorithm2" value="11" type="int"/>
+
     <param name="optimization/max_iteration_num1" value="2" type="int"/>
     <param name="optimization/max_iteration_num2" value="300" type="int"/>
     <param name="optimization/max_iteration_num3" value="200" type="int"/>
+    <param name="optimization/max_iteration_num4" value="200" type="int"/>
+
+    <param name="optimization/max_iteration_time1" value="0.0001" type="double"/>
+    <param name="optimization/max_iteration_time2" value="0.005" type="double"/>
+    <param name="optimization/max_iteration_time3" value="0.003" type="double"/>
+    <param name="optimization/max_iteration_time4" value="0.003" type="double"/>
+
     <param name="optimization/order" value="3" type="int"/>
 
     <param name="bspline/limit_vel" value="$(arg max_vel)" type="double"/>

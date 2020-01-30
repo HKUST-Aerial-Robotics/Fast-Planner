@@ -38,7 +38,8 @@ struct LocalTrajectoryInfo {
   double traj_duration_, t_start_, t_end_, time_start_;
   ros::Time time_traj_start_;
   Eigen::Vector3d pos_traj_start_;
-  NonUniformBspline position_traj_, velocity_traj_, acceleration_traj_;
+  NonUniformBspline position_traj_, velocity_traj_, acceleration_traj_, yaw_traj_, yawdot_traj_,
+      yawdotdot_traj_;
 };
 
 class IntermediatePlanData {
@@ -56,43 +57,38 @@ public:
 
   // kinodynamic path
   vector<Eigen::Vector3d> kino_path_;
-
-  void clear() {
-  }
-
 };
+
+// Fast Planner Manager
+// Key algorithms of mapping and planning are called
 
 class FastPlannerManager {
 public:
-  FastPlannerManager() {
-  }
+  FastPlannerManager();
   ~FastPlannerManager();
 
   /* main planning interface */
   bool kinodynamicReplan(Eigen::Vector3d start_pt, Eigen::Vector3d start_vel, Eigen::Vector3d start_acc,
                          Eigen::Vector3d end_pt, Eigen::Vector3d end_vel);
 
-  void updateTrajectoryInfo();
+  bool planGlobalReferenceTraj(const Eigen::Vector3d& start_pos);
+
+  bool topoAndVisibReplan();
+
+  void planHeading(const Eigen::Vector3d& start_yaw);
 
   /* planning info and module initializer */
   void initializePlanningModules(ros::NodeHandle& nh);
   void setGlobalWaypoints(vector<Eigen::Vector3d>& waypoints);
 
   /* planning and trajectory info query */
-  bool checkTrajCollision(double& distance);
-  PlanParameters* getPlanParameters();
   LocalTrajectoryInfo* getLocalTrajectoryInfo();
+  bool checkTrajCollision(double& distance);
+
+  PlanParameters* getPlanParameters();
   IntermediatePlanData* getIntermediatePlanData();
 
   EDTEnvironment::Ptr getEDTEnvironment();
-  bool checkOdometryAvailable();
-
-  /* ---------- evaluation ---------- */
-
-  void getSolvingTime(double& ts, double& to, double& ta);
-  void getCostCurve(vector<double>& cost, vector<double>& time) {
-    // bspline_optimizer_->getCostCurve(cost, time);
-  }
 
 private:
   /* main planning algorithms & modules */
@@ -100,12 +96,19 @@ private:
   EDTEnvironment::Ptr edt_environment_;
 
   Astar::Ptr geometric_path_finder_;
-  KinodynamicAstar::Ptr kinodynamic_path_finder_;
-  vector<BsplineOptimizer::Ptr> bspline_optimizers_;
+  KinodynamicAstar kinodynamic_path_finder_;
+  vector<BsplineOptimizer> bspline_optimizers_;
 
   PlanParameters pp_;
   LocalTrajectoryInfo traj_info_;
   IntermediatePlanData plan_data_;
+
+  void updateTrajInfo();
+
+  void reparameterizeBspline(NonUniformBspline& bspline, double ratio, Eigen::MatrixXd& ctrl_pts,
+                             double& dt, double& time_inc);
+
+  void calcNextYaw(const double& last_yaw, double& yaw);
 
 public:
   typedef shared_ptr<FastPlannerManager> Ptr;

@@ -12,33 +12,82 @@
 // The format of points: N x 3 matrix, each row is a point
 namespace fast_planner {
 class BsplineOptimizer {
+
+public:
+  static const int SMOOTHNESS;
+  static const int DISTANCE;
+  static const int FEASIBILITY;
+  static const int ENDPOINT;
+  static const int GUIDE;
+  static const int WAYPOINTS;
+
+  static const int GUIDE_PHASE;
+  static const int NORMAL_PHASE;
+
+  BsplineOptimizer() {
+  }
+  ~BsplineOptimizer() {
+  }
+
+  /* main API */
+  void setEnvironment(const EDTEnvironment::Ptr& env);
+  void setParam(ros::NodeHandle& nh);
+  Eigen::MatrixXd BsplineOptimizeTraj(const Eigen::MatrixXd& points, const double& ts,
+                                      const int& cost_function, int max_num_id, int max_time_id);
+
+  /* helper function */
+
+  // required inputs
+  void setControlPoints(const Eigen::MatrixXd& points);
+  void setBsplineInterval(const double& ts);
+  void setCostFunction(const int& cost_function);
+  void setTerminateCond(const int& max_num_id, const int& max_time_id);
+
+  // optional inputs
+  void setGuidePath(const vector<Eigen::Vector3d>& guide_pt);
+  void setWaypoints(const vector<Eigen::Vector3d>& waypts,
+                    const vector<int>& waypt_idx);  // N-2 constraints at most
+  void enableDynamic(double time_start);
+
+  void optimize();
+
+  Eigen::MatrixXd getControlPoints();
+  vector<Eigen::Vector3d> matrixToVectors(const Eigen::MatrixXd& ctrl_pts);
+
 private:
   EDTEnvironment::Ptr edt_environment_;
 
   // main input
-  Eigen::MatrixXd control_points_;     // B-spline control points, nx3
+  Eigen::MatrixXd control_points_;     // B-spline control points, N x dim
   double bspline_interval_;            // B-spline knot span
-  int order_;                          // bspline degree
   Eigen::Vector3d end_pt_;             // end of the trajectory
-  vector<Eigen::Vector3d> guide_pts_;  // geometric guiding path
-  int optimization_phase_;             // use different objective function
+  int dim_;                            // dimension of the B-spline
+                                       //
+  vector<Eigen::Vector3d> guide_pts_;  // geometric guiding path points, N-6
+  vector<Eigen::Vector3d> waypoints_;  // waypts constraints
+  vector<int> waypt_idx_;              // waypts constraints index
+                                       //
+  int max_num_id_, max_time_id_;       // stopping criteria
+  int cost_function_;                  // used to determine objective function
   bool dynamic_;                       // moving obstacles ?
   double time_traj_start_;             // global time for moving obstacles
 
   /* optimization parameters */
-  double lambda1_;            // curvature weight
-  double lambda2_;            // distance weight
-  double lambda3_;            // feasibility weight
-  double lambda4_;            // end point weight
-  double lambda5_;            // guide cost weight
-  double lambda6_;            // visibility cost weight
-  double dist0_;              // safe distance
-  double max_vel_, max_acc_;  // dynamic limits
-  double visib_min_;          // threshold of visibility
-  int algorithm1_;            // optimization algorithms used in different phase
-  int algorithm2_;            //
-  int max_iteration_num_[3];  // optimization stopping criteria
-  int visible_num_;           //
+  int order_;                     // bspline degree
+  double lambda1_;                // curvature weight
+  double lambda2_;                // distance weight
+  double lambda3_;                // feasibility weight
+  double lambda4_;                // end point weight
+  double lambda5_;                // guide cost weight
+  double lambda7_;                // waypoints cost weight
+                                  //
+  double dist0_;                  // safe distance
+  double max_vel_, max_acc_;      // dynamic limits
+                                  //
+  int algorithm1_;                // optimization algorithms for quadratic cost
+  int algorithm2_;                // optimization algorithms for general cost
+  int max_iteration_num_[4];      // stopping criteria that can be used
+  double max_iteration_time_[4];  // stopping criteria that can be used
 
   /* intermediate variables */
   /* buffer for gradient of cost function, to avoid repeated allocation and
@@ -49,53 +98,22 @@ private:
   vector<Eigen::Vector3d> g_feasibility_;
   vector<Eigen::Vector3d> g_endpoint_;
   vector<Eigen::Vector3d> g_guide_;
-  vector<Eigen::Vector3d> g_visib_;
+  vector<Eigen::Vector3d> g_waypoints_;
+
   int variable_num_;                   // optimization variables
   int iter_num_;                       // iteration of the solver
   std::vector<double> best_variable_;  //
   double min_cost_;                    //
-  int start_id_, end_id_;              //
-  int end_constrain_;                  // hard / soft constraints of end point
+
   vector<Eigen::Vector3d> block_pts_;  // blocking points to compute visibility
 
-public:
-  BsplineOptimizer() {
-  }
-  ~BsplineOptimizer() {
-  }
-
-  /* final position constraint. In hard constraint, the last p control points
-   * will not be optimized and the end position cost funtion is disabled. In
-   * soft one, the last p control points are also added to the optimization
-   * variables and the endpoint cost function is computed*/
-  enum END_CONSTRAINT { HARD_CONSTRAINT = 1, SOFT_CONSTRAINT = 2 };
-
-  /* different phases of the optimization. In phase one, only the smoothness and
-  guiding path cost are computed. In phase two, smoothness, collision and
-  dynamic feasibility are computed. In the future we will include phase three,
-  in which a visibility cost is added on the basis of phase two */
-  enum OPTIMIZATION_PHASE { FIRST_PHASE = 1, SECOND_PHASE = 2, VISIB_PHASE = 3 };
-
-  /* main API */
-  void setEnvironment(const EDTEnvironment::Ptr& env);
-  void setParam(ros::NodeHandle& nh);
-  Eigen::MatrixXd BsplineOptimizeTraj(Eigen::MatrixXd points, double ts, int obj, double time_limit,
-                                      const vector<Eigen::Vector3d>& guide_pt);
-  /* helper function */
-  void setControlPoints(Eigen::MatrixXd points);
-  void setBSplineInterval(double ts);
-  void setGuidePath(const vector<Eigen::Vector3d>& guide_pt);
-  void setOptimizationPhase(int obj);
-  void setOptimizationRange(int start, int end);
-  void optimize(int end_cons, bool dynamic, double time_limit, double time_start = -1.0);
-  Eigen::MatrixXd getControlPoints();
-  vector<Eigen::Vector3d> matrixToVectors(const Eigen::MatrixXd& ctrl_pts);
-
-private:
   /* cost function */
   /* calculate each part of cost function with control points q as input */
+
   static double costFunction(const std::vector<double>& x, std::vector<double>& grad, void* func_data);
   void combineCost(const std::vector<double>& x, vector<double>& grad, double& cost);
+
+  // q contains all control points
   void calcSmoothnessCost(const vector<Eigen::Vector3d>& q, double& cost,
                           vector<Eigen::Vector3d>& gradient);
   void calcDistanceCost(const vector<Eigen::Vector3d>& q, double& cost,
@@ -104,6 +122,11 @@ private:
                            vector<Eigen::Vector3d>& gradient);
   void calcEndpointCost(const vector<Eigen::Vector3d>& q, double& cost,
                         vector<Eigen::Vector3d>& gradient);
+  void calcGuideCost(const vector<Eigen::Vector3d>& q, double& cost, vector<Eigen::Vector3d>& gradient);
+  void calcWaypointsCost(const vector<Eigen::Vector3d>& q, double& cost,
+                         vector<Eigen::Vector3d>& gradient);
+
+  bool isQuadratic();
 
   /* for benckmark evaluation only */
 public:
@@ -117,6 +140,8 @@ public:
   }
 
   typedef shared_ptr<BsplineOptimizer> Ptr;
+
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 }  // namespace fast_planner
 #endif

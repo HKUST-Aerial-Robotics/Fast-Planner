@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ros/kinetic/include",
+                "/usr/include/eigen3",
+                "/home/bzhouai/data/release_ws/devel/include/quadrotor_msgs/",
+                "/home/bzhouai/data/release_ws/devel/include",
+                "/usr/include/pcl-1.7",
+                "${workspaceFolder}/plan_env/include",
+                "/opt/ros/kinetic/include/opencv-3.3.1-dev",
+                "${workspaceFolder}/active_perception/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

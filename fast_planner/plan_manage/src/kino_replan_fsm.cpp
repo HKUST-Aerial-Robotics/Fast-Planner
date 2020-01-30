@@ -7,6 +7,7 @@ void KinoReplanFSM::init(ros::NodeHandle& nh) {
   current_wp_ = 0;
   exec_state_ = FSM_EXEC_STATE::INIT;
   have_target_ = false;
+  have_odom_ = false;
 
   /*  fsm param  */
   nh.param("fsm/flight_type", target_type_, -1);
@@ -65,7 +66,20 @@ void KinoReplanFSM::waypointCallback(const nav_msgs::PathConstPtr& msg) {
 }
 
 void KinoReplanFSM::odometryCallback(const nav_msgs::OdometryConstPtr& msg) {
-  drone_odometry_ = *msg;
+  odom_pos_(0) = msg->pose.pose.position.x;
+  odom_pos_(1) = msg->pose.pose.position.y;
+  odom_pos_(2) = msg->pose.pose.position.z;
+
+  odom_vel_(0) = msg->twist.twist.linear.x;
+  odom_vel_(1) = msg->twist.twist.linear.y;
+  odom_vel_(2) = msg->twist.twist.linear.z;
+
+  odom_orient_.w() = msg->pose.pose.orientation.w;
+  odom_orient_.x() = msg->pose.pose.orientation.x;
+  odom_orient_.y() = msg->pose.pose.orientation.y;
+  odom_orient_.z() = msg->pose.pose.orientation.z;
+
+  have_odom_ = true;
 }
 
 void KinoReplanFSM::changeFSMExecState(FSM_EXEC_STATE new_state, string pos_call) {
@@ -86,14 +100,14 @@ void KinoReplanFSM::execFSMCallback(const ros::TimerEvent& e) {
   fsm_num++;
   if (fsm_num == 100) {
     printFSMExecState();
-    if (!planner_manager_->checkOdometryAvailable()) cout << "no odom." << endl;
+    if (!have_odom_) cout << "no odom." << endl;
     if (!trigger_) cout << "wait for goal." << endl;
     fsm_num = 0;
   }
 
   switch (exec_state_) {
     case INIT: {
-      if (!planner_manager_->checkOdometryAvailable()) {
+      if (!have_odom_) {
         return;
       }
       if (!trigger_) {
@@ -113,14 +127,13 @@ void KinoReplanFSM::execFSMCallback(const ros::TimerEvent& e) {
     }
 
     case GEN_NEW_TRAJ: {
-      start_pt_(0) = drone_odometry_.pose.pose.position.x;
-      start_pt_(1) = drone_odometry_.pose.pose.position.y;
-      start_pt_(2) = drone_odometry_.pose.pose.position.z;
-
-      start_vel_(0) = drone_odometry_.twist.twist.linear.x;
-      start_vel_(1) = drone_odometry_.twist.twist.linear.y;
-      start_vel_(2) = drone_odometry_.twist.twist.linear.z;
+      start_pt_ = odom_pos_;
+      start_vel_ = odom_vel_;
       start_acc_.setZero();
+
+      Eigen::Vector3d rot_x = odom_orient_.toRotationMatrix().block(0, 0, 3, 1);
+      start_yaw_(0) = atan2(rot_x(1), rot_x(0));
+      start_yaw_(1) = start_yaw_(2) = 0.0;
 
       bool success = callKinodynamicReplan();
       if (success) {
@@ -170,10 +183,11 @@ void KinoReplanFSM::execFSMCallback(const ros::TimerEvent& e) {
       start_pt_ = info->position_traj_.evaluateDeBoor(info->t_start_ + t_cur);
       start_vel_ = info->velocity_traj_.evaluateDeBoor(info->t_start_ + t_cur);
       start_acc_ = info->acceleration_traj_.evaluateDeBoor(info->t_start_ + t_cur);
-      // cout << "t_cur: " << t_cur << endl;
-      // cout << "start pt: " << start_pt_.transpose() << endl;
 
-      /* inform server */
+      start_yaw_(0) = info->yaw_traj_.evaluateDeBoor(info->t_start_ + t_cur)[0];
+      start_yaw_(1) = info->yawdot_traj_.evaluateDeBoor(info->t_start_ + t_cur)[0];
+      start_yaw_(2) = info->yawdotdot_traj_.evaluateDeBoor(info->t_start_ + t_cur)[0];
+
       std_msgs::Empty replan_msg;
       replan_pub_.publish(replan_msg);
 
@@ -181,8 +195,6 @@ void KinoReplanFSM::execFSMCallback(const ros::TimerEvent& e) {
       if (success) {
         changeFSMExecState(EXEC_TRAJ, "FSM");
       } else {
-        // have_target_ = false;
-        // changeFSMExecState(WAIT_TARGET, "FSM");
         changeFSMExecState(GEN_NEW_TRAJ, "FSM");
       }
       break;
@@ -200,7 +212,7 @@ void KinoReplanFSM::checkCollisionCallback(const ros::TimerEvent& e) {
         edt_env->evaluateCoarseEDT(end_pt_, info->time_start_ + info->traj_duration_) :
         edt_env->evaluateCoarseEDT(end_pt_, -1.0);
 
-    if (dist <= 0.1) {
+    if (dist <= 0.3) {
       /* try to find a max distance goal around */
       bool new_goal = false;
       const double dr = 0.5, dtheta = 30, dz = 0.3;
@@ -213,7 +225,7 @@ void KinoReplanFSM::checkCollisionCallback(const ros::TimerEvent& e) {
 
             new_x = end_pt_(0) + r * cos(theta / 57.3);
             new_y = end_pt_(1) + r * sin(theta / 57.3);
-            new_z = end_pt_(2) + dz;
+            new_z = end_pt_(2) + nz;
 
             Eigen::Vector3d new_pt(new_x, new_y, new_z);
             dist = planner_manager_->getPlanParameters()->dynamic_environment_ ?
@@ -231,7 +243,7 @@ void KinoReplanFSM::checkCollisionCallback(const ros::TimerEvent& e) {
         }
       }
 
-      if (max_dist > 0.1) {
+      if (max_dist > 0.3) {
         cout << "change goal, replan." << endl;
         end_pt_ = goal;
         have_target_ = true;
@@ -274,7 +286,8 @@ bool KinoReplanFSM::callKinodynamicReplan() {
 
   if (plan_success) {
 
-    planner_manager_->updateTrajectoryInfo();
+    planner_manager_->planHeading(start_yaw_);
+
     auto info = planner_manager_->getLocalTrajectoryInfo();
 
     /* publish traj */
@@ -283,21 +296,27 @@ bool KinoReplanFSM::callKinodynamicReplan() {
     bspline.start_time = info->time_traj_start_;
     bspline.traj_id = info->traj_id_;
 
-    Eigen::MatrixXd ctrl_pts = info->position_traj_.getControlPoint();
-    for (int i = 0; i < ctrl_pts.rows(); ++i) {
-      Eigen::Vector3d pvt = ctrl_pts.row(i);
-      geometry_msgs::Point pt;
+    Eigen::MatrixXd pos_pts = info->position_traj_.getControlPoint();
 
-      pt.x = pvt(0);
-      pt.y = pvt(1);
-      pt.z = pvt(2);
-      bspline.pts.push_back(pt);
+    for (int i = 0; i < pos_pts.rows(); ++i) {
+      geometry_msgs::Point pt;
+      pt.x = pos_pts(i, 0);
+      pt.y = pos_pts(i, 1);
+      pt.z = pos_pts(i, 2);
+      bspline.pos_pts.push_back(pt);
     }
 
     Eigen::VectorXd knots = info->position_traj_.getKnot();
     for (int i = 0; i < knots.rows(); ++i) {
       bspline.knots.push_back(knots(i));
     }
+
+    Eigen::MatrixXd yaw_pts = info->yaw_traj_.getControlPoint();
+    for (int i = 0; i < yaw_pts.rows(); ++i) {
+      double yaw = yaw_pts(i, 0);
+      bspline.yaw_pts.push_back(yaw);
+    }
+    bspline.yaw_dt = info->yaw_traj_.getInterval();
 
     bspline_pub_.publish(bspline);
 
@@ -306,8 +325,9 @@ bool KinoReplanFSM::callKinodynamicReplan() {
 
     visualization_->drawGeometricPath(plan_data->kino_path_, 0.1, Eigen::Vector4d(1, 0, 0, 1));
 
-    visualization_->drawBspline(info->position_traj_, 0.1, Eigen::Vector4d(1.0, 1.0, 0.0, 1), false,
-                                0.15, Eigen::Vector4d(1, 0, 0, 1));
+    visualization_->drawBspline(info->position_traj_, 0.1, Eigen::Vector4d(1.0, 1.0, 0.0, 1), false, 0.2,
+                                Eigen::Vector4d(1, 0, 0, 1));
+
     return true;
 
   } else {

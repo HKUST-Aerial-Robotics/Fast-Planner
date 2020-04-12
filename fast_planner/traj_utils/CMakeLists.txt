@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(traj_utils)
 
 find_package(catkin REQUIRED COMPONENTS
+  bspline
   bspline_opt
   path_searching
   poly_traj
@@ -16,7 +17,7 @@ find_package(PCL 1.7 REQUIRED)
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES traj_utils
- CATKIN_DEPENDS path_searching bspline_opt poly_traj
+ CATKIN_DEPENDS path_searching bspline bspline_opt poly_traj
 #  DEPENDS system_lib
 )
 

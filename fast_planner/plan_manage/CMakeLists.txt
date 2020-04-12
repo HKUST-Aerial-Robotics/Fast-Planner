@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   quadrotor_msgs
   plan_env
   path_searching
+  bspline
   bspline_opt
   traj_utils
   message_generation
@@ -38,7 +39,7 @@ generate_messages(
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES plan_manage
- CATKIN_DEPENDS plan_env path_searching bspline_opt traj_utils message_runtime
+ CATKIN_DEPENDS plan_env path_searching bspline bspline_opt traj_utils message_runtime
 #  DEPENDS system_lib
 )
 
@@ -54,6 +55,7 @@ include_directories(
 add_executable(fast_planner_node
   src/fast_planner_node.cpp 
   src/kino_replan_fsm.cpp
+  src/topo_replan_fsm.cpp
   src/planner_manager.cpp
   )
 target_link_libraries(fast_planner_node 
@@ -64,12 +66,4 @@ add_executable(traj_server src/traj_server.cpp)
 target_link_libraries(traj_server ${catkin_LIBRARIES})
 add_dependencies(traj_server ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
-# benchmark node
-# add_executable(compare_topo
-#   src/compare_topo.cpp 
-#   src/planner_manager.cpp
-#   )
-# target_link_libraries(compare_topo 
-#   ${catkin_LIBRARIES}
-#   )
 

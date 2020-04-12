@@ -13,6 +13,7 @@
 #include <bspline_opt/bspline_optimizer.h>
 #include <path_searching/kinodynamic_astar.h>
 #include <plan_env/edt_environment.h>
+#include <plan_env/obj_predictor.h>
 #include <plan_env/sdf_map.h>
 #include <plan_manage/Bspline.h>
 #include <plan_manage/planner_manager.h>
@@ -49,11 +50,6 @@ private:
   /* ---------- flag ---------- */
   enum FSM_EXEC_STATE { INIT, WAIT_TARGET, GEN_NEW_TRAJ, REPLAN_TRAJ, EXEC_TRAJ, REPLAN_NEW };
   enum TARGET_TYPE { MANUAL_TARGET = 1, PRESET_TARGET = 2, REFENCE_PATH = 3 };
-
-  // TODO: redefine 3 modes:
-  // manual target: click and go
-  // preset target: set target in config
-  // waypoints: trajectory will pass through multiple points
 
   /* planning utils */
   FastPlannerManager::Ptr planner_manager_;

@@ -5,7 +5,7 @@
 
 void SDFMap::initMap(ros::NodeHandle& nh) {
   node_ = nh;
-  
+
   /* get parameter */
   double x_size, y_size, z_size;
   node_.param("sdf_map/resolution", mp_.resolution_, -1.0);
@@ -40,7 +40,7 @@ void SDFMap::initMap(ros::NodeHandle& nh) {
 
   node_.param("sdf_map/esdf_slice_height", mp_.esdf_slice_height_, -0.1);
   node_.param("sdf_map/visualization_truncate_height", mp_.visualization_truncate_height_, -0.1);
-  node_.param("sdf_map/ceil_height", mp_.ceil_height_, -0.1);
+  node_.param("sdf_map/virtual_ceil_height", mp_.virtual_ceil_height_, -0.1);
 
   node_.param("sdf_map/show_occ_time", mp_.show_occ_time_, false);
   node_.param("sdf_map/show_esdf_time", mp_.show_esdf_time_, false);
@@ -69,8 +69,7 @@ void SDFMap::initMap(ros::NodeHandle& nh) {
   cout << "max: " << mp_.clamp_max_log_ << endl;
   cout << "thresh log: " << mp_.min_occupancy_log_ << endl;
 
-  for (int i = 0; i < 3; ++i)
-    mp_.map_voxel_num_(i) = ceil(mp_.map_size_(i) / mp_.resolution_);
+  for (int i = 0; i < 3; ++i) mp_.map_voxel_num_(i) = ceil(mp_.map_size_(i) / mp_.resolution_);
 
   mp_.map_min_boundary_ = mp_.map_origin_;
   mp_.map_max_boundary_ = mp_.map_origin_ + mp_.map_size_;
@@ -142,7 +141,7 @@ void SDFMap::initMap(ros::NodeHandle& nh) {
   depth_pub_ = node_.advertise<sensor_msgs::PointCloud2>("/sdf_map/depth_cloud", 10);
 
   md_.occ_need_update_ = false;
-  md_.need_clear_local_map_ = false;
+  md_.local_updated_ = false;
   md_.esdf_need_update_ = false;
   md_.has_first_depth_ = false;
   md_.has_odom_ = false;
@@ -154,6 +153,11 @@ void SDFMap::initMap(ros::NodeHandle& nh) {
   md_.update_num_ = 0;
   md_.max_esdf_time_ = 0.0;
   md_.max_fuse_time_ = 0.0;
+
+  rand_noise_ = uniform_real_distribution<double>(-0.2, 0.2);
+  rand_noise2_ = normal_distribution<double>(0, 0.2);
+  random_device rd;
+  eng_ = default_random_engine(rd());
 }
 
 void SDFMap::resetBuffer() {
@@ -213,8 +217,7 @@ void SDFMap::fillESDF(F_get_val f_get_val, F_set_val f_set_val, int start, int e
   k = start;
 
   for (int q = start; q <= end; q++) {
-    while (z[k + 1] < q)
-      k++;
+    while (z[k + 1] < q) k++;
     double val = (q - v[k]) * (q - v[k]) + f_get_val(v[k]);
     f_set_val(q, val);
   }
@@ -399,7 +402,10 @@ void SDFMap::projectDepthImage() {
           depth = (*row_ptr) * inv_factor;
           row_ptr = row_ptr + mp_.skip_pixel_;
 
-          // filter depth with low certainty
+          // filter depth
+          // depth += rand_noise_(eng_);
+          // if (depth > 0.01) depth += rand_noise2_(eng_);
+
           if (*row_ptr == 0) {
             depth = mp_.max_ray_length_ + 0.1;
           } else if (depth < mp_.depth_filter_mindist_) {
@@ -553,7 +559,7 @@ void SDFMap::raycastProcess() {
   boundIndex(md_.local_bound_min_);
   boundIndex(md_.local_bound_max_);
 
-  md_.need_clear_local_map_ = true;
+  md_.local_updated_ = true;
 
   // update occupancy cached in queue
   Eigen::Vector3d local_range_min = md_.camera_pos_ - mp_.local_update_range_;
@@ -725,8 +731,8 @@ void SDFMap::clearAndInflateLocalMap() {
       }
 
   // add virtual ceiling to limit flight height
-  if (mp_.ceil_height_ > 0.0) {
-    int ceil_id = floor((mp_.ceil_height_ - mp_.map_origin_(2)) * mp_.resolution_inv_);
+  if (mp_.virtual_ceil_height_ > -0.5) {
+    int ceil_id = floor((mp_.virtual_ceil_height_ - mp_.map_origin_(2)) * mp_.resolution_inv_);
     for (int x = md_.local_bound_min_(0); x <= md_.local_bound_max_(0); ++x)
       for (int y = md_.local_bound_min_(1); y <= md_.local_bound_max_(1); ++y) {
         md_.occupancy_buffer_inflate_[toAddress(x, y, ceil_id)] = 1;
@@ -735,13 +741,13 @@ void SDFMap::clearAndInflateLocalMap() {
 }
 
 void SDFMap::visCallback(const ros::TimerEvent& /*event*/) {
-  // publishMap();
-  publishMapInflate(true);
-  publishUpdateRange();
-  publishESDF();
+  publishMap();
+  publishMapInflate(false);
+  // publishUpdateRange();
+  // publishESDF();
 
-  publishUnknown();
-  publishDepth();
+  // publishUnknown();
+  // publishDepth();
 }
 
 void SDFMap::updateOccupancyCallback(const ros::TimerEvent& /*event*/) {
@@ -754,9 +760,7 @@ void SDFMap::updateOccupancyCallback(const ros::TimerEvent& /*event*/) {
   projectDepthImage();
   raycastProcess();
 
-  if (md_.need_clear_local_map_) {
-    clearAndInflateLocalMap();
-  }
+  if (md_.local_updated_) clearAndInflateLocalMap();
 
   t2 = ros::Time::now();
 
@@ -768,8 +772,8 @@ void SDFMap::updateOccupancyCallback(const ros::TimerEvent& /*event*/) {
              md_.fuse_time_ / md_.update_num_, md_.max_fuse_time_);
 
   md_.occ_need_update_ = false;
-  if (md_.need_clear_local_map_) md_.esdf_need_update_ = true;
-  md_.need_clear_local_map_ = false;
+  if (md_.local_updated_) md_.esdf_need_update_ = true;
+  md_.local_updated_ = false;
 }
 
 void SDFMap::updateESDFCallback(const ros::TimerEvent& /*event*/) {
@@ -925,13 +929,53 @@ void SDFMap::cloudCallback(const sensor_msgs::PointCloud2ConstPtr& img) {
 }
 
 void SDFMap::publishMap() {
+  // pcl::PointXYZ pt;
+  // pcl::PointCloud<pcl::PointXYZ> cloud;
+
+  // Eigen::Vector3i min_cut = md_.local_bound_min_ -
+  //     Eigen::Vector3i(mp_.local_map_margin_, mp_.local_map_margin_, mp_.local_map_margin_);
+  // Eigen::Vector3i max_cut = md_.local_bound_max_ +
+  //     Eigen::Vector3i(mp_.local_map_margin_, mp_.local_map_margin_, mp_.local_map_margin_);
+
+  // boundIndex(min_cut);
+  // boundIndex(max_cut);
+
+  // for (int x = min_cut(0); x <= max_cut(0); ++x)
+  //   for (int y = min_cut(1); y <= max_cut(1); ++y)
+  //     for (int z = min_cut(2); z <= max_cut(2); ++z) {
+
+  //       if (md_.occupancy_buffer_[toAddress(x, y, z)] <= mp_.min_occupancy_log_) continue;
+
+  //       Eigen::Vector3d pos;
+  //       indexToPos(Eigen::Vector3i(x, y, z), pos);
+  //       if (pos(2) > mp_.visualization_truncate_height_) continue;
+
+  //       pt.x = pos(0);
+  //       pt.y = pos(1);
+  //       pt.z = pos(2);
+  //       cloud.points.push_back(pt);
+  //     }
+
+  // cloud.width = cloud.points.size();
+  // cloud.height = 1;
+  // cloud.is_dense = true;
+  // cloud.header.frame_id = mp_.frame_id_;
+
+  // sensor_msgs::PointCloud2 cloud_msg;
+  // pcl::toROSMsg(cloud, cloud_msg);
+  // map_pub_.publish(cloud_msg);
+
+  // ROS_INFO("pub map");
+
   pcl::PointXYZ pt;
   pcl::PointCloud<pcl::PointXYZ> cloud;
 
-  Eigen::Vector3i min_cut = md_.local_bound_min_ -
-      Eigen::Vector3i(mp_.local_map_margin_, mp_.local_map_margin_, mp_.local_map_margin_);
-  Eigen::Vector3i max_cut = md_.local_bound_max_ +
-      Eigen::Vector3i(mp_.local_map_margin_, mp_.local_map_margin_, mp_.local_map_margin_);
+  Eigen::Vector3i min_cut = md_.local_bound_min_;
+  Eigen::Vector3i max_cut = md_.local_bound_max_;
+
+  int lmm = mp_.local_map_margin_ / 2;
+  min_cut -= Eigen::Vector3i(lmm, lmm, lmm);
+  max_cut += Eigen::Vector3i(lmm, lmm, lmm);
 
   boundIndex(min_cut);
   boundIndex(max_cut);
@@ -939,8 +983,7 @@ void SDFMap::publishMap() {
   for (int x = min_cut(0); x <= max_cut(0); ++x)
     for (int y = min_cut(1); y <= max_cut(1); ++y)
       for (int z = min_cut(2); z <= max_cut(2); ++z) {
-
-        if (md_.occupancy_buffer_[toAddress(x, y, z)] <= mp_.min_occupancy_log_) continue;
+        if (md_.occupancy_buffer_inflate_[toAddress(x, y, z)] == 0) continue;
 
         Eigen::Vector3d pos;
         indexToPos(Eigen::Vector3i(x, y, z), pos);
@@ -949,19 +992,17 @@ void SDFMap::publishMap() {
         pt.x = pos(0);
         pt.y = pos(1);
         pt.z = pos(2);
-        cloud.points.push_back(pt);
+        cloud.push_back(pt);
       }
 
   cloud.width = cloud.points.size();
   cloud.height = 1;
   cloud.is_dense = true;
   cloud.header.frame_id = mp_.frame_id_;
-
   sensor_msgs::PointCloud2 cloud_msg;
+
   pcl::toROSMsg(cloud, cloud_msg);
   map_pub_.publish(cloud_msg);
-
-  // ROS_INFO("pub map");
 }
 
 void SDFMap::publishMapInflate(bool all_info) {
@@ -983,7 +1024,6 @@ void SDFMap::publishMapInflate(bool all_info) {
   for (int x = min_cut(0); x <= max_cut(0); ++x)
     for (int y = min_cut(1); y <= max_cut(1); ++y)
       for (int z = min_cut(2); z <= max_cut(2); ++z) {
-
         if (md_.occupancy_buffer_inflate_[toAddress(x, y, z)] == 0) continue;
 
         Eigen::Vector3d pos;
@@ -1177,21 +1217,13 @@ void SDFMap::checkDist() {
       }
 }
 
-bool SDFMap::odomValid() {
-  return md_.has_odom_;
-}
+bool SDFMap::odomValid() { return md_.has_odom_; }
 
-bool SDFMap::hasDepthObservation() {
-  return md_.has_first_depth_;
-}
+bool SDFMap::hasDepthObservation() { return md_.has_first_depth_; }
 
-double SDFMap::getResolution() {
-  return mp_.resolution_;
-}
+double SDFMap::getResolution() { return mp_.resolution_; }
 
-Eigen::Vector3d SDFMap::getOrigin() {
-  return mp_.map_origin_;
-}
+Eigen::Vector3d SDFMap::getOrigin() { return mp_.map_origin_; }
 
 int SDFMap::getVoxelNum() {
   return mp_.map_voxel_num_[0] * mp_.map_voxel_num_[1] * mp_.map_voxel_num_[2];

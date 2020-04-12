@@ -91,7 +91,7 @@
 
     <param name="sdf_map/esdf_slice_height" value="0.3"/>
     <param name="sdf_map/visualization_truncate_height"   value="2.49"/>
-    <param name="sdf_map/ceil_height"   value="2.5"/>
+    <param name="sdf_map/virtual_ceil_height"   value="2.5"/>
     <param name="sdf_map/show_occ_time"  value="false"/>
     <param name="sdf_map/show_esdf_time" value="false"/>
     <param name="sdf_map/pose_type"     value="1"/>  
@@ -110,7 +110,6 @@
     <param name="manager/use_kinodynamic_path" value="true" type="bool"/>
     <param name="manager/use_topo_path" value="false" type="bool"/>
     <param name="manager/use_optimization" value="true" type="bool"/>
-    <param name="manager/use_active_perception" value="false" type="bool"/>
 
   <!-- kinodynamic path searching -->
     <param name="search/max_tau" value="0.6" type="double"/>
@@ -131,7 +130,7 @@
     <param name="optimization/lambda2" value="0.8" type="double"/>
     <param name="optimization/lambda3" value="0.00001" type="double"/>
     <param name="optimization/lambda4" value="0.01" type="double"/>
-    <param name="optimization/lambda7" value="10.0" type="double"/>
+    <param name="optimization/lambda7" value="100.0" type="double"/>
     <param name="optimization/dist0" value="0.7" type="double"/>
     <param name="optimization/max_vel" value="$(arg max_vel)" type="double"/>
     <param name="optimization/max_acc" value="$(arg max_acc)" type="double"/>

@@ -24,14 +24,12 @@ public:
   static const int GUIDE_PHASE;
   static const int NORMAL_PHASE;
 
-  BsplineOptimizer() {
-  }
-  ~BsplineOptimizer() {
-  }
+  BsplineOptimizer() {}
+  ~BsplineOptimizer() {}
 
   /* main API */
-  void setEnvironment(const EDTEnvironment::Ptr& env);
-  void setParam(ros::NodeHandle& nh);
+  void            setEnvironment(const EDTEnvironment::Ptr& env);
+  void            setParam(ros::NodeHandle& nh);
   Eigen::MatrixXd BsplineOptimizeTraj(const Eigen::MatrixXd& points, const double& ts,
                                       const int& cost_function, int max_num_id, int max_time_id);
 
@@ -46,12 +44,11 @@ public:
   // optional inputs
   void setGuidePath(const vector<Eigen::Vector3d>& guide_pt);
   void setWaypoints(const vector<Eigen::Vector3d>& waypts,
-                    const vector<int>& waypt_idx);  // N-2 constraints at most
-  void enableDynamic(double time_start);
+                    const vector<int>&             waypt_idx);  // N-2 constraints at most
 
   void optimize();
 
-  Eigen::MatrixXd getControlPoints();
+  Eigen::MatrixXd         getControlPoints();
   vector<Eigen::Vector3d> matrixToVectors(const Eigen::MatrixXd& ctrl_pts);
 
 private:
@@ -59,34 +56,39 @@ private:
 
   // main input
   Eigen::MatrixXd control_points_;     // B-spline control points, N x dim
-  double bspline_interval_;            // B-spline knot span
+  double          bspline_interval_;   // B-spline knot span
   Eigen::Vector3d end_pt_;             // end of the trajectory
-  int dim_;                            // dimension of the B-spline
+  int             dim_;                // dimension of the B-spline
                                        //
   vector<Eigen::Vector3d> guide_pts_;  // geometric guiding path points, N-6
   vector<Eigen::Vector3d> waypoints_;  // waypts constraints
-  vector<int> waypt_idx_;              // waypts constraints index
+  vector<int>             waypt_idx_;  // waypts constraints index
                                        //
-  int max_num_id_, max_time_id_;       // stopping criteria
-  int cost_function_;                  // used to determine objective function
-  bool dynamic_;                       // moving obstacles ?
-  double time_traj_start_;             // global time for moving obstacles
+  int    max_num_id_, max_time_id_;    // stopping criteria
+  int    cost_function_;               // used to determine objective function
+  bool   dynamic_;                     // moving obstacles ?
+  double start_time_;                  // global time for moving obstacles
 
   /* optimization parameters */
-  int order_;                     // bspline degree
-  double lambda1_;                // curvature weight
+  int    order_;                  // bspline degree
+  double lambda1_;                // jerk smoothness weight
   double lambda2_;                // distance weight
   double lambda3_;                // feasibility weight
   double lambda4_;                // end point weight
   double lambda5_;                // guide cost weight
+  double lambda6_;                // visibility cost weight
   double lambda7_;                // waypoints cost weight
+  double lambda8_;                // acc smoothness
                                   //
   double dist0_;                  // safe distance
   double max_vel_, max_acc_;      // dynamic limits
+  double visib_min_;              // threshold of visibility
+  double wnl_;                    //
+  double dlmin_;                  //
                                   //
-  int algorithm1_;                // optimization algorithms for quadratic cost
-  int algorithm2_;                // optimization algorithms for general cost
-  int max_iteration_num_[4];      // stopping criteria that can be used
+  int    algorithm1_;             // optimization algorithms for quadratic cost
+  int    algorithm2_;             // optimization algorithms for general cost
+  int    max_iteration_num_[4];   // stopping criteria that can be used
   double max_iteration_time_[4];  // stopping criteria that can be used
 
   /* intermediate variables */
@@ -100,10 +102,10 @@ private:
   vector<Eigen::Vector3d> g_guide_;
   vector<Eigen::Vector3d> g_waypoints_;
 
-  int variable_num_;                   // optimization variables
-  int iter_num_;                       // iteration of the solver
+  int                 variable_num_;   // optimization variables
+  int                 iter_num_;       // iteration of the solver
   std::vector<double> best_variable_;  //
-  double min_cost_;                    //
+  double              min_cost_;       //
 
   vector<Eigen::Vector3d> block_pts_;  // blocking points to compute visibility
 
@@ -111,7 +113,7 @@ private:
   /* calculate each part of cost function with control points q as input */
 
   static double costFunction(const std::vector<double>& x, std::vector<double>& grad, void* func_data);
-  void combineCost(const std::vector<double>& x, vector<double>& grad, double& cost);
+  void          combineCost(const std::vector<double>& x, vector<double>& grad, double& cost);
 
   // q contains all control points
   void calcSmoothnessCost(const vector<Eigen::Vector3d>& q, double& cost,
@@ -123,23 +125,25 @@ private:
   void calcEndpointCost(const vector<Eigen::Vector3d>& q, double& cost,
                         vector<Eigen::Vector3d>& gradient);
   void calcGuideCost(const vector<Eigen::Vector3d>& q, double& cost, vector<Eigen::Vector3d>& gradient);
+  void calcVisibilityCost(const vector<Eigen::Vector3d>& q, double& cost,
+                          vector<Eigen::Vector3d>& gradient);
   void calcWaypointsCost(const vector<Eigen::Vector3d>& q, double& cost,
                          vector<Eigen::Vector3d>& gradient);
-
+  void calcViewCost(const vector<Eigen::Vector3d>& q, double& cost, vector<Eigen::Vector3d>& gradient);
   bool isQuadratic();
 
   /* for benckmark evaluation only */
 public:
   vector<double> vec_cost_;
   vector<double> vec_time_;
-  ros::Time time_start_;
+  ros::Time      time_start_;
 
   void getCostCurve(vector<double>& cost, vector<double>& time) {
     cost = vec_cost_;
     time = vec_time_;
   }
 
-  typedef shared_ptr<BsplineOptimizer> Ptr;
+  typedef unique_ptr<BsplineOptimizer> Ptr;
 
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

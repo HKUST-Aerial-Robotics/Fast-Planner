@@ -6,6 +6,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <iostream>
+#include <random>
 #include <nav_msgs/Odometry.h>
 #include <queue>
 #include <ros/ros.h>
@@ -26,6 +27,19 @@
 #define logit(x) (log((x) / (1 - (x))))
 
 using namespace std;
+
+// voxel hashing
+template <typename T>
+struct matrix_hash : std::unary_function<T, size_t> {
+  std::size_t operator()(T const& matrix) const {
+    size_t seed = 0;
+    for (size_t i = 0; i < matrix.size(); ++i) {
+      auto elem = *(matrix.data() + i);
+      seed ^= std::hash<typename T::Scalar>()(elem) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    }
+    return seed;
+  }
+};
 
 // constant parameters
 
@@ -64,7 +78,7 @@ struct MappingParameters {
   int local_map_margin_;
 
   /* visualization and computation time display */
-  double esdf_slice_height_, visualization_truncate_height_, ceil_height_, ground_height_;
+  double esdf_slice_height_, visualization_truncate_height_, virtual_ceil_height_, ground_height_;
   bool show_esdf_time_, show_occ_time_;
 
   /* active mapping */
@@ -97,7 +111,7 @@ struct MappingData {
 
   // flags of map state
 
-  bool occ_need_update_, need_clear_local_map_, esdf_need_update_;
+  bool occ_need_update_, local_updated_, esdf_need_update_;
   bool has_first_depth_;
   bool has_odom_, has_cloud_;
 
@@ -127,10 +141,8 @@ struct MappingData {
 
 class SDFMap {
 public:
-  SDFMap() {
-  }
-  ~SDFMap() {
-  }
+  SDFMap() {}
+  ~SDFMap() {}
 
   enum { POSE_STAMPED = 1, ODOMETRY = 2, INVALID_IDX = -10000 };
 
@@ -142,7 +154,6 @@ public:
   inline void indexToPos(const Eigen::Vector3i& id, Eigen::Vector3d& pos);
   inline int toAddress(const Eigen::Vector3i& id);
   inline int toAddress(int& x, int& y, int& z);
-
   inline bool isInMap(const Eigen::Vector3d& pos);
   inline bool isInMap(const Eigen::Vector3i& idx);
 
@@ -154,7 +165,9 @@ public:
 
   inline void boundIndex(Eigen::Vector3i& id);
   inline bool isUnknown(const Eigen::Vector3i& id);
+  inline bool isUnknown(const Eigen::Vector3d& pos);
   inline bool isKnownFree(const Eigen::Vector3i& id);
+  inline bool isKnownOccupied(const Eigen::Vector3i& id);
 
   // distance field management
   inline double getDistance(const Eigen::Vector3d& pos);
@@ -244,6 +257,9 @@ private:
   ros::Timer occ_timer_, esdf_timer_, vis_timer_;
 
   //
+  uniform_real_distribution<double> rand_noise_;
+  normal_distribution<double> rand_noise2_;
+  default_random_engine eng_;
 };
 
 /* ============================== definition of inline function
@@ -285,6 +301,12 @@ inline bool SDFMap::isUnknown(const Eigen::Vector3i& id) {
   return md_.occupancy_buffer_[toAddress(id1)] < mp_.clamp_min_log_ - 1e-3;
 }
 
+inline bool SDFMap::isUnknown(const Eigen::Vector3d& pos) {
+  Eigen::Vector3i idc;
+  posToIndex(pos, idc);
+  return isUnknown(idc);
+}
+
 inline bool SDFMap::isKnownFree(const Eigen::Vector3i& id) {
   Eigen::Vector3i id1 = id;
   boundIndex(id1);
@@ -293,6 +315,14 @@ inline bool SDFMap::isKnownFree(const Eigen::Vector3i& id) {
   // return md_.occupancy_buffer_[adr] >= mp_.clamp_min_log_ &&
   //     md_.occupancy_buffer_[adr] < mp_.min_occupancy_log_;
   return md_.occupancy_buffer_[adr] >= mp_.clamp_min_log_ && md_.occupancy_buffer_inflate_[adr] == 0;
+}
+
+inline bool SDFMap::isKnownOccupied(const Eigen::Vector3i& id) {
+  Eigen::Vector3i id1 = id;
+  boundIndex(id1);
+  int adr = toAddress(id1);
+
+  return md_.occupancy_buffer_inflate_[adr] == 1;
 }
 
 inline double SDFMap::getDistWithGradTrilinear(Eigen::Vector3d pos, Eigen::Vector3d& grad) {
@@ -417,13 +447,11 @@ inline bool SDFMap::isInMap(const Eigen::Vector3i& idx) {
 }
 
 inline void SDFMap::posToIndex(const Eigen::Vector3d& pos, Eigen::Vector3i& id) {
-  for (int i = 0; i < 3; ++i)
-    id(i) = floor((pos(i) - mp_.map_origin_(i)) * mp_.resolution_inv_);
+  for (int i = 0; i < 3; ++i) id(i) = floor((pos(i) - mp_.map_origin_(i)) * mp_.resolution_inv_);
 }
 
 inline void SDFMap::indexToPos(const Eigen::Vector3i& id, Eigen::Vector3d& pos) {
-  for (int i = 0; i < 3; ++i)
-    pos(i) = (id(i) + 0.5) * mp_.resolution_ + mp_.map_origin_(i);
+  for (int i = 0; i < 3; ++i) pos(i) = (id(i) + 0.5) * mp_.resolution_ + mp_.map_origin_(i);
 }
 
 inline void SDFMap::inflatePoint(const Eigen::Vector3i& pt, int step, vector<Eigen::Vector3i>& pts) {

@@ -1,4 +1,4 @@
-#include "bspline_opt/non_uniform_bspline.h"
+#include "bspline/non_uniform_bspline.h"
 #include "nav_msgs/Odometry.h"
 #include "plan_manage/Bspline.h"
 #include "quadrotor_msgs/PositionCommand.h"
@@ -21,8 +21,9 @@ using fast_planner::NonUniformBspline;
 bool receive_traj_ = false;
 vector<NonUniformBspline> traj_;
 double traj_duration_;
-ros::Time time_traj_start_;
+ros::Time start_time_;
 int traj_id_;
+
 // yaw control
 double last_yaw_;
 double time_forward_;
@@ -127,7 +128,7 @@ void bsplineCallback(plan_manage::BsplineConstPtr msg) {
 
   NonUniformBspline yaw_traj(yaw_pts, msg->order, msg->yaw_dt);
 
-  time_traj_start_ = msg->start_time;
+  start_time_ = msg->start_time;
   traj_id_ = msg->traj_id;
 
   traj_.clear();
@@ -146,7 +147,7 @@ void replanCallback(std_msgs::Empty msg) {
   /* reset duration */
   const double time_out = 0.01;
   ros::Time time_now = ros::Time::now();
-  double t_stop = (time_now - time_traj_start_).toSec() + time_out;
+  double t_stop = (time_now - start_time_).toSec() + time_out;
   traj_duration_ = min(t_stop, traj_duration_);
 }
 
@@ -179,7 +180,7 @@ void cmdCallback(const ros::TimerEvent& e) {
   if (!receive_traj_) return;
 
   ros::Time time_now = ros::Time::now();
-  double t_cur = (time_now - time_traj_start_).toSec();
+  double t_cur = (time_now - start_time_).toSec();
 
   Eigen::Vector3d pos, vel, acc, pos_f;
   double yaw, yawdot;
@@ -242,8 +243,8 @@ void cmdCallback(const ros::TimerEvent& e) {
 
   // draw cmd
 
-  drawCmd(pos, vel, 0, Eigen::Vector4d(0, 1, 0, 1));
-  drawCmd(pos, acc, 1, Eigen::Vector4d(0, 0, 1, 1));
+  // drawCmd(pos, vel, 0, Eigen::Vector4d(0, 1, 0, 1));
+  // drawCmd(pos, acc, 1, Eigen::Vector4d(0, 0, 1, 1));
 
   Eigen::Vector3d dir(cos(yaw), sin(yaw), 0.0);
   drawCmd(pos, 2 * dir, 2, Eigen::Vector4d(1, 1, 0, 0.7));

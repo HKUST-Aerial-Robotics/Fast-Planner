@@ -49,16 +49,21 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>bspline</build_depend>
   <build_depend>bspline_opt</build_depend>
   <build_depend>path_searching</build_depend>
   <build_depend>poly_traj</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>std_msgs</build_depend>
+
+  <build_export_depend>bspline</build_export_depend>
   <build_export_depend>bspline_opt</build_export_depend>
   <build_export_depend>path_searching</build_export_depend>
   <build_export_depend>poly_traj</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
+
+  <exec_depend>bspline</exec_depend>
   <exec_depend>bspline_opt</exec_depend>
   <exec_depend>path_searching</exec_depend>
   <exec_depend>poly_traj</exec_depend>

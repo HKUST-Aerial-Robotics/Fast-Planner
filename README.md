@@ -22,12 +22,13 @@ Currently it contains two distinctive planning architectures:
   <img src="files/exp1.gif" width = "420" height = "237"/>
   <img src="files/exp2.gif" width = "420" height = "237"/>
 </p>
+
 Demonstrations about the planner have been reported on the [IEEE Spectrum](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot).
 
 - __B-spline trajectory optimization guided by topological paths__:
 <p align="center">
-  <img src="files/indoor.gif" width = "420" height = "237"/>
-  <img src="files/outdoor.gif" width = "420" height = "237"/>
+  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/indoor.gif" width = "420" height = "237"/>
+  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/outdoor.gif" width = "420" height = "237"/>
 </p>
 
 __Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
@@ -140,7 +141,7 @@ Similarly , you will find the random map generated and can use the ```2D Nav Goa
 
 <!-- add some gif here -->
  <p align="center">
-  <img src="files/sim.gif" width = "500" height = "360"/>
+  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/sim.gif" width = "500" height = "360"/>
  </p>
 
 If you use this algorithm for your application or research, please cite our related paper:

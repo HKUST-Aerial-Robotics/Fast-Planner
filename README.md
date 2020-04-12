@@ -6,9 +6,9 @@ This package is under active maintenance. New features will be listed here.
 
 - The implementation of the ICRA2020 paper: Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths is integrated into this project. - April 12, 2020
 
-- The online mapping algorithm is now available. It can take in depth image and camera pose pairs as input, do raycasting to update a probabilistic volumetric map, and build a Euclidean signed distance field (ESDF) for the planning system.
+- The online mapping algorithm is now available. It can take in depth image and camera pose pairs as input, do raycasting to update a probabilistic volumetric map, and build a Euclidean signed distance field (ESDF) for the planning system. - Jan 30, 2020
 
-- The heading (yaw angle) planner which enables smoother change of heading direction is available.
+- The heading (yaw angle) planner which enables smoother change of heading direction is available. - Jan 11, 2020
 
 ## Overview
 
@@ -26,8 +26,8 @@ Demonstrations about the planner have been reported on the [IEEE Spectrum](https
 
 - __B-spline trajectory optimization guided by topological paths__:
 <p align="center">
-  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/indoor.gif" width = "420" height = "237"/>
-  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/outdoor.gif" width = "420" height = "237"/>
+  <img src="files/indoor.gif" width = "420" height = "237"/>
+  <img src="files/outdoor.gif" width = "420" height = "237"/>
 </p>
 
 __Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
@@ -95,7 +95,7 @@ Run [Rviz](http://wiki.ros.org/rviz) with our configuration firstly:
 ```
 
 Then run the quadrotor simulator and __Fast-Planner__.
-Currently there are two different planning algorithms available, as list in the following: 
+Currently there are two different planning algorithms available, as listed in the following: 
 
 ### 3.1 Kinodynamic Search & B-spline Optimization
 
@@ -140,7 +140,7 @@ Similarly , you will find the random map generated and can use the ```2D Nav Goa
 
 <!-- add some gif here -->
  <p align="center">
-  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/sim.gif" width = "500" height = "360"/>
+  <img src="files/sim.gif" width = "500" height = "360"/>
  </p>
 
 If you use this algorithm for your application or research, please cite our related paper:

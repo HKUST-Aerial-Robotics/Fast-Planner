@@ -104,6 +104,10 @@ Currently there are two different planning algorithms available, as listed in th
 
 ### 3.1 Kinodynamic Search & B-spline Optimization
 
+In this method, a kinodynamic path searching finds a safe, dynamically feasible, and minimum-time initial trajectory in the discretized control space. 
+Then the smoothness and clearance of the trajectory are improved by a B-spline optimization.
+To test this method, run:
+
 ```
   <!-- open a new terminal, go to your workspace and run: -->
   source devel/setup.bash
@@ -135,13 +139,16 @@ If you use this algorithm for your application or research, please cite our rela
 
 ### 3.2 Trajectory optimization guided by topological paths
 
+The key feature of the algorithm is that it searches for multiple trajectories in distinctive topological classes. Thanks to the strategy, the solution space is explored more thoroughly, avoiding local minima and yielding better replanned trajectories.
+Similarly, run:
+
 ```
   <!-- open a new terminal, go to your workspace and run: -->
   source devel/setup.bash
   roslaunch plan_manage topo_replan.launch
 ```
 
-Similarly , you will find the random map generated and can use the ```2D Nav Goal``` to trigger the planner:
+then you will find the random map generated and can use the ```2D Nav Goal``` to trigger the planner:
 
 <!-- add some gif here -->
  <p align="center">

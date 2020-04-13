@@ -145,7 +145,7 @@ Similarly , you will find the random map generated and can use the ```2D Nav Goa
 
 <!-- add some gif here -->
  <p align="center">
-  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/icra20_3.gif" width = "500" height = "360"/>
+  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/icra20_3.gif" width = "576" height = "360"/>
  </p>
 
 If you use this algorithm for your application or research, please cite our related paper:

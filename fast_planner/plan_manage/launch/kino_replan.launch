@@ -37,7 +37,7 @@
 
     <!-- 1: use 2D Nav Goal to select goal  -->
     <!-- 2: use global waypoints below  -->
-    <arg name="flight_type" value="2" />
+    <arg name="flight_type" value="1" />
     
     <!-- global waypoints -->
     <!-- If flight_type is set to 2, the drone will travel these waypoints one by one -->
@@ -78,8 +78,8 @@
     <arg name="map_size_x_" value="$(arg map_size_x)"/>
     <arg name="map_size_y_" value="$(arg map_size_y)"/>
     <arg name="map_size_z_" value="$(arg map_size_z)"/>
-    <arg name="c_num" value="50"/>
-    <arg name="p_num" value="100"/>
+    <arg name="c_num" value="10"/>
+    <arg name="p_num" value="150"/>
 
     <arg name="odometry_topic" value="$(arg odom_topic)" />
   </include>

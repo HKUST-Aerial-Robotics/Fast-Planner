@@ -79,8 +79,8 @@ After the prerequisites are satisfied, you can clone this repository to your cat
  set(ENABLE_CUDA false)
  # set(ENABLE_CUDA true)
  ```
-The GPU version is recommended, because it generates depth images more like a real depth camera.
-If you want to use the GPU depth rendering, set ENABLE_CUDA to true, and also remember to change the 'arch' and 'code' flags according to your graphics card devices. You can check the right code [here](https://github.com/tpruvot/ccminer/wiki/Compatibility).
+However, we STRONGLY recommend the GPU version, because it generates depth images more like a real depth camera.
+To enable the GPU depth rendering, set ENABLE_CUDA to true, and also remember to change the 'arch' and 'code' flags according to your graphics card devices. You can check the right code [here](https://github.com/tpruvot/ccminer/wiki/Compatibility).
 
 ```
     set(CUDA_NVCC_FLAGS 

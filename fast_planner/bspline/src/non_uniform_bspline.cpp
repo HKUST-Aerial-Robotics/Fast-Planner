@@ -315,7 +315,7 @@ void NonUniformBspline::parameterizeToBspline(const double& ts, const vector<Eig
     return;
   }
 
-  if (point_set.size() <= 3) {
+  if (point_set.size() < 2) {
     cout << "[B-spline]:point set have only " << point_set.size() << " points." << endl;
     return;
   }

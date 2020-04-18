@@ -117,7 +117,7 @@ void BsplineOptimizer::optimize() {
         (control_points_.row(pt_num - 3) + 4 * control_points_.row(pt_num - 2) +
          control_points_.row(pt_num - 1));
   } else {
-    variable_num_ = dim_ * (pt_num - 2 * order_);
+    variable_num_ = max(0, dim_ * (pt_num - 2 * order_)) ;
   }
 
   /* do optimization using NLopt slover */

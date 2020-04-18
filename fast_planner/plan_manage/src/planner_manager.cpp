@@ -254,6 +254,10 @@ bool FastPlannerManager::planGlobalTraj(const Eigen::Vector3d& start_pos) {
   }
 
   inter_points.push_back(points.back());
+  if (inter_points.size() == 2) {
+    Eigen::Vector3d mid = (inter_points[0] + inter_points[1]) * 0.5;
+    inter_points.insert(inter_points.begin() + 1, mid);
+  }
 
   // write position matrix
   int             pt_num = inter_points.size();
@@ -267,7 +271,9 @@ bool FastPlannerManager::planGlobalTraj(const Eigen::Vector3d& start_pos) {
   }
 
   time(0) *= 2.0;
+  time(0) = max(1.0, time(0));
   time(time.rows() - 1) *= 2.0;
+  time(time.rows() - 1) = max(1.0, time(time.rows() - 1));
 
   PolynomialTraj gl_traj = minSnapTraj(pos, zero, zero, zero, zero, time);
 

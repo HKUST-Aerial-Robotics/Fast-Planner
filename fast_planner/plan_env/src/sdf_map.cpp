@@ -278,9 +278,6 @@ void SDFMap::updateESDF3d() {
         }
       }
 
-  md_.tmp_buffer1_.clear();
-  md_.tmp_buffer2_.clear();
-
   ros::Time t1, t2;
 
   for (int x = min_esdf[0]; x <= max_esdf[0]; x++) {

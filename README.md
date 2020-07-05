@@ -1,7 +1,7 @@
 # Fast-Planner
 
 
-- __July 5, 2020__: We will release the implementation of paper: _RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight_ (submitted to TRO, under review).
+- __July 5, 2020__: We will release the implementation of paper: _RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight_ (submitted to TRO, under review) in the future.
 
 - __April 12, 2020__: The implementation of the ICRA2020 paper: _Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths_ is available.
 
@@ -36,7 +36,7 @@ Complete videos:
 [video2](https://www.youtube.com/watch?v=YcEaFTjs-a0), 
 [video3](https://www.youtube.com/watch?v=toGhoGYyoAY). 
 
-Demonstrations about the planner have been reported on the IEEE Spectrum: [report 1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [report 2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot).
+Demonstrations about the planner have been reported on the IEEE Spectrum: [page1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [page2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot) (search for _HKUST_ in the pages).
 
 
 __Authors__: [Boyu Zhou](http://boyuzhou.net) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/), [Fei Gao](https://ustfei.com/) from [ZJU FAST Lab](http://www.kivact.com/).
@@ -47,10 +47,11 @@ Key modules are contained in __fast_planner__ and a lightweight __uav_simulator_
 
 - __plan_env__: The online mapping algorithms. It takes in depth image (or point cloud) and camera pose (odometry) pairs as input, do raycasting to update a probabilistic volumetric map, and build an Euclidean signed distance filed (ESDF) for the planning system. 
 - __path_searching__: Front-end path searching algorithms. 
-  Currently it includes a kinodynamic version of A* algorithm that respects the dynamics of quadrotors.
-  It also contains a sampling-based topological path planning algorithm to generate multiple topologically distinctive paths that capture the structure of the 3D environments. 
+  Currently it includes a kinodynamic path searching that respects the dynamics of quadrotors.
+  It also contains a sampling-based topological path searching algorithm to generate multiple topologically distinctive paths that capture the structure of the 3D environments. 
 - __bspline__: A implementation of the B-spline-based trajectory representation.
 - __bspline_opt__: The gradient-based trajectory optimization using B-spline trajectory.
+- __active_perception__: Perception-aware planning strategy, to appear.
 - __plan_manage__: High-level modules that schedule and call the mapping and planning algorithms. Interfaces for launching the whole system, as well as the configuration files are contained here.
 
 

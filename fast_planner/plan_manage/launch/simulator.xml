@@ -19,7 +19,7 @@
     <param name="map/z_size"     value="$(arg map_size_z_)" />
     <param name="map/resolution" value="0.1"/>        
 
-    <param name="ObstacleShape/seed" value="1"/>
+    <param name="ObstacleShape/seed" value="-1"/>
     <param name="map/obs_num"    value="$(arg p_num)"/>
     <param name="ObstacleShape/lower_rad" value="0.5"/>
     <param name="ObstacleShape/upper_rad" value="0.7"/>

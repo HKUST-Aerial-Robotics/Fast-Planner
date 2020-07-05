@@ -1,46 +1,49 @@
 # Fast-Planner
 
-## News
 
-This package is under active maintenance. New features will be listed here.
+- __July 5, 2020__: We will release the implementation of paper: _RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight_ (submitted to TRO, under review).
 
-- The implementation of the ICRA2020 paper: Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths is integrated into this project. - April 12, 2020
+- __April 12, 2020__: The implementation of the ICRA2020 paper: _Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths_ is available.
 
-- The online mapping algorithm is now available. It can take in depth image and camera pose pairs as input, do raycasting to update a probabilistic volumetric map, and build a Euclidean signed distance field (ESDF) for the planning system. - Jan 30, 2020
-
-- The heading (yaw angle) planner which enables smoother change of heading direction is available. - Jan 11, 2020
+- __Jan 30, 2020__: The volumetric mapping is integrated with our planner. It takes in depth image and camera pose pairs as input, do raycasting to fuse the measurements, and build a Euclidean signed distance field (ESDF) for the planning module.
 
 ## Overview
 
-__Fast-Planner__ is a robust and efficient planning system that enables agile and fast autonomous flight for quadrotors.
-It takes in information from odometry, sensor streams (such as depth images and point cloud), and outputs high-quality trajectories within a few milliseconds.
-It can support aggressive and fully autonomous flight even in unknown and cluttered environments.
-Currently it contains two distinctive planning architectures:
-- __Kinodynamic search + B-spline trajectory optimization__:
+**Fast-Planner** is a robust and computationally efficient planning system that enables quadrotor fast flight in complex unknown environments.
+It contains a collection of carefully designed techniques:
 
-<p align="center">
-  <img src="files/ral19_1.gif" width = "420" height = "237"/>
-  <img src="files/ral19_2.gif" width = "420" height = "237"/>
-</p>
+- Kinodynamic path searching
+- B-spline-based trajectory optimization
+- Topological path searching and path-guided optimization
+- Perception-aware planning strategy (to appear)
 
-Demonstrations about the planner have been reported on the [IEEE Spectrum](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot).
-Complete video is [here](https://www.youtube.com/watch?v=toGhoGYyoAY).
-
-- __B-spline trajectory optimization guided by topological paths__:
+<!-- - __B-spline trajectory optimization guided by topological paths__:
 <p align="center">
   <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/icra20_1.gif" width = "420" height = "237"/>
   <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/icra20_2.gif" width = "420" height = "237"/>
+</p> -->
+
+<p align="center">
+  <img src="files/raptor1.gif" width = "400" height = "225"/>
+  <img src="files/raptor2.gif" width = "400" height = "225"/>
+  <img src="files/icra20_2.gif" width = "400" height = "225"/>
+  <img src="files/ral19_2.gif" width = "400" height = "225"/>
+  <!-- <img src="files/icra20_1.gif" width = "320" height = "180"/> -->
 </p>
 
-Complete video is [here](https://www.youtube.com/watch?v=YcEaFTjs-a0).
+Complete videos: 
+[video1](https://www.youtube.com/watch?v=6wrh4G1-cQ4&t=87s),
+[video2](https://www.youtube.com/watch?v=YcEaFTjs-a0), 
+[video3](https://www.youtube.com/watch?v=toGhoGYyoAY). 
+
+Demonstrations about the planner have been reported on the IEEE Spectrum: [report 1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [report 2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot).
 
 
-__Authors__: [Boyu Zhou](http://boyuzhou.net), [Fei Gao](https://ustfei.com/) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/).
+__Authors__: [Boyu Zhou](http://boyuzhou.net) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/), [Fei Gao](https://ustfei.com/) from [ZJU FAST Lab](http://www.kivact.com/).
 
 ### File Structure
 
-This package contains the implementation of __Fast-Planner__ (in folder __fast_planner__) and a lightweight
-quadrotor simulator (in __uav_simulator__). Key components of __fast_planner__ are:
+Key modules are contained in __fast_planner__ and a lightweight __uav_simulator__ is used for testing. Key components of __fast_planner__ are:
 
 - __plan_env__: The online mapping algorithms. It takes in depth image (or point cloud) and camera pose (odometry) pairs as input, do raycasting to update a probabilistic volumetric map, and build an Euclidean signed distance filed (ESDF) for the planning system. 
 - __path_searching__: Front-end path searching algorithms. 
@@ -99,10 +102,10 @@ Run [Rviz](http://wiki.ros.org/rviz) with our configuration firstly:
   roslaunch plan_manage rviz.launch
 ```
 
-Then run the quadrotor simulator and __Fast-Planner__.
-Currently there are two different planning algorithms available, as listed in the following: 
+Then run the quadrotor simulator and __Fast-Planner__. 
+Several examples are provided below:
 
-### 3.1 Kinodynamic Search & B-spline Optimization
+### 3.1 Kinodynamic Path Searching & B-spline Optimization
 
 In this method, a kinodynamic path searching finds a safe, dynamically feasible, and minimum-time initial trajectory in the discretized control space. 
 Then the smoothness and clearance of the trajectory are improved by a B-spline optimization.
@@ -118,12 +121,12 @@ Normally, you will find the randomly generated map and the drone model in ```Rvi
 
 <!-- add some gif here -->
  <p align="center">
-  <img src="files/ral19_3.gif" width = "640" height = "360"/>
+  <img src="files/ral19_3.gif" width = "480" height = "270"/>
  </p>
 
 If you use this algorithm for your application or research, please cite our related paper:
 
-- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (RA-L), 2019.
+- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (**RA-L**), 2019.
 ```
 @article{zhou2019robust,
   title={Robust and efficient quadrotor trajectory generation for fast autonomous flight},
@@ -137,9 +140,9 @@ If you use this algorithm for your application or research, please cite our rela
 }
 ```
 
-### 3.2 Trajectory optimization guided by topological paths
+### 3.2 Topological Path Searching & Path-guided Optimization
 
-The key feature of the algorithm is that it searches for multiple trajectories in distinctive topological classes. Thanks to the strategy, the solution space is explored more thoroughly, avoiding local minima and yielding better replanned trajectories.
+This method features searching for multiple trajectories in distinctive topological classes. Thanks to the strategy, the solution space is explored more thoroughly, avoiding local minima and yielding better solutions.
 Similarly, run:
 
 ```
@@ -152,12 +155,12 @@ then you will find the random map generated and can use the ```2D Nav Goal``` to
 
 <!-- add some gif here -->
  <p align="center">
-  <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/icra20_3.gif" width = "576" height = "360"/>
+  <img src="files/icra20_3.gif" width = "480" height = "270"/>
  </p>
 
 If you use this algorithm for your application or research, please cite our related paper:
 
-- [__Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths__](https://arxiv.org/abs/1912.12644), Boyu Zhou, Fei Gao, Jie Pan and Shaojie Shen, submitted to IEEE International Conference on Robotics and Automation (__ICRA__), 2020.
+- [__Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths__](https://arxiv.org/abs/1912.12644), Boyu Zhou, Fei Gao, Jie Pan and Shaojie Shen, IEEE International Conference on Robotics and Automation (__ICRA__), 2020.
 
 ```
 @article{zhou2019robust,
@@ -167,6 +170,10 @@ If you use this algorithm for your application or research, please cite our rela
   year={2019}
 }
 ```
+
+### 3.3 Perception-aware Replanning
+
+To appear.
 
 ## 4. Use in Your Application
 

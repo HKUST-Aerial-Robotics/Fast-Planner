@@ -32,7 +32,7 @@ It contains a collection of carefully designed techniques:
 </p>
 
 Complete videos: 
-[video1](https://www.youtube.com/watch?v=6wrh4G1-cQ4&t=87s),
+[video1](https://www.youtube.com/watch?v=NvR8Lq2pmPg&feature=emb_logo),
 [video2](https://www.youtube.com/watch?v=YcEaFTjs-a0), 
 [video3](https://www.youtube.com/watch?v=toGhoGYyoAY). 
 

@@ -1,22 +1,8 @@
 # Fast-Planner
 
+**Fast-Planner** is developed aiming to enables quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. More features and interesting methods will come in the future :wink:.
 
-- __July 5, 2020__: We will release the implementation of paper: _RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight_ (submitted to TRO, under review) in the future.
-
-- __April 12, 2020__: The implementation of the ICRA2020 paper: _Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths_ is available.
-
-- __Jan 30, 2020__: The volumetric mapping is integrated with our planner. It takes in depth image and camera pose pairs as input, do raycasting to fuse the measurements, and build a Euclidean signed distance field (ESDF) for the planning module.
-
-## Overview
-
-**Fast-Planner** is a robust and computationally efficient planning system that enables quadrotor fast flight in complex unknown environments.
-It contains a collection of carefully designed techniques:
-
-- Kinodynamic path searching
-- B-spline-based trajectory optimization
-- Topological path searching and path-guided optimization
-- Perception-aware planning strategy (to appear)
-
+__Authors__: [Boyu Zhou](http://boyuzhou.net) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/), [Fei Gao](https://ustfei.com/) from [ZJU FAST Lab](http://www.kivact.com/).
 <!-- - __B-spline trajectory optimization guided by topological paths__:
 <p align="center">
   <img src="https://github.com/HKUST-Aerial-Robotics/TopoTraj/blob/master/files/icra20_1.gif" width = "420" height = "237"/>
@@ -35,15 +21,69 @@ Complete videos:
 [video1](https://www.youtube.com/watch?v=NvR8Lq2pmPg&feature=emb_logo),
 [video2](https://www.youtube.com/watch?v=YcEaFTjs-a0), 
 [video3](https://www.youtube.com/watch?v=toGhoGYyoAY). 
+Demonstrations about this work have been reported on the IEEE Spectrum: [page1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [page2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot),
+[page3](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-soft-exoskeleton-glove-extra-thumb) (search for _HKUST_ in the pages).
 
-Demonstrations about the planner have been reported on the IEEE Spectrum: [page1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [page2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot) (search for _HKUST_ in the pages).
+To run this project in minutes, check [Quick Start](#Quick-Start). Check other section for more detailed information.
+
+Please kindly star:star: this project if it helps you. We take efforts to maintain it:grin::grin:.
 
 
-__Authors__: [Boyu Zhou](http://boyuzhou.net) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/), [Fei Gao](https://ustfei.com/) from [ZJU FAST Lab](http://www.kivact.com/).
 
-### File Structure
+## Table of Contents
 
-Key modules are contained in __fast_planner__ and a lightweight __uav_simulator__ is used for testing. Key components of __fast_planner__ are:
+* [Quick Start](#1-Quick-Start)
+* [Algorithms and Papers](#2-Algorithms-and-Papers)
+* [Setup and Config](#3-Setup-and-Config)
+* [Run Simulations](#4-run-simulations)
+* [Use in Your Application](#5-use-in-your-application)
+* [News](#6-news)
+
+
+## 1. Quick Start
+
+The project is developed and tested in Ubuntu 16.04, ROS Kinetic. Run the following commands to setup:
+
+```
+  sudo apt-get install libnlopt-dev libarmadillo-dev
+  cd ${YOUR_WORKSPACE_PATH}/src
+  git clone https://github.com/HKUST-Aerial-Robotics/Fast-Planner.git
+  cd ../
+  catkin_make
+```
+
+After compilation you can start the visualization by: 
+
+```
+  source devel/setup.bash
+  roslaunch plan_manage rviz.launch
+```
+and start a simulation (run in a new terminals): 
+```
+  source devel/setup.bash
+  roslaunch plan_manage kino_replan.launch
+```
+You will find the random map and the drone in ```Rviz```. You can select goals for the drone to reach using the ```2D Nav Goal``` tool. A sample simulation is showed [here](#demo1).
+
+
+## 2. Algorithms and Papers
+
+The project contains a collection of robust and computationally efficient algorithms for quadrotor fast flight:
+* Kinodynamic path searching
+* B-spline-based trajectory optimization
+* Topological path searching and path-guided optimization
+* Perception-aware planning strategy (to appear)
+
+These methods are detailed in our papers listed below. 
+
+Please cite at least one of our papers if you use this project in your research: [Bibtex](files/bib.txt).
+
+- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (**RA-L**), 2019.
+- [__Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths__](https://arxiv.org/abs/1912.12644), Boyu Zhou, Fei Gao, Jie Pan and Shaojie Shen, IEEE International Conference on Robotics and Automation (__ICRA__), 2020.
+- [__RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight__](https://arxiv.org/abs/2007.03465), Boyu Zhou, Jie Pan, Fei Gao and Shaojie Shen, submitted to IEEE Transactions on Robotics (__T-RO__), under review. 
+
+
+All planning algorithms along with other key modules, such as mapping, are implemented in __fast_planner__:
 
 - __plan_env__: The online mapping algorithms. It takes in depth image (or point cloud) and camera pose (odometry) pairs as input, do raycasting to update a probabilistic volumetric map, and build an Euclidean signed distance filed (ESDF) for the planning system. 
 - __path_searching__: Front-end path searching algorithms. 
@@ -51,29 +91,39 @@ Key modules are contained in __fast_planner__ and a lightweight __uav_simulator_
   It also contains a sampling-based topological path searching algorithm to generate multiple topologically distinctive paths that capture the structure of the 3D environments. 
 - __bspline__: A implementation of the B-spline-based trajectory representation.
 - __bspline_opt__: The gradient-based trajectory optimization using B-spline trajectory.
-- __active_perception__: Perception-aware planning strategy, to appear.
+- __active_perception__: Perception-aware planning strategy, which enable to quadrotor to actively observe and avoid unknown obstacles, to appear in the future.
 - __plan_manage__: High-level modules that schedule and call the mapping and planning algorithms. Interfaces for launching the whole system, as well as the configuration files are contained here.
 
+Besides the folder __fast_planner__, a lightweight __uav_simulator__ is used for testing.
 
-## 1. Prerequisites
 
-- Our software is developed and tested in Ubuntu 16.04, [ROS Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu). Other version may require minor modification.
+## 3. Setup and Config
 
-- We use [**NLopt**](https://nlopt.readthedocs.io/en/latest/NLopt_Installation) to solve the non-linear optimization problem.
+### Prerequisites
 
-- The __uav_simulator__ depends on the C++ linear algebra library __Armadillo__, which can be installed by ``` sudo apt-get install libarmadillo-dev ```.
+1. We use [**NLopt**](https://nlopt.readthedocs.io/en/latest/NLopt_Installation) to solve the non-linear optimization problem. The __uav_simulator__ depends on the C++ linear algebra library __Armadillo__. The two dependencies can be installed by 
+``` 
+sudo apt-get install libnlopt-dev libarmadillo-dev 
+```
 
-- _Optional_: If you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used (See section _Use GPU Depth Rendering_ below).
 
-## 2. Build on ROS
+2. Our software is developed and tested in Ubuntu 16.04, ROS Kinetic. Follow the [document](http://wiki.ros.org/kinetic/Installation/Ubuntu) to install ROS.
+
+
+3. _Optional_: If you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used (See section _Use GPU Depth Rendering_ below).
+
+### Build on ROS
 
 After the prerequisites are satisfied, you can clone this repository to your catkin workspace and catkin_make. A new workspace is recommended:
+
 ```
   cd ${YOUR_WORKSPACE_PATH}/src
   git clone https://github.com/HKUST-Aerial-Robotics/Fast-Planner.git
   cd ../
   catkin_make
 ```
+
+Now you are ready to [run a simulation](#4-run-simulations).
 
 ### Use GPU Depth Rendering (Optional)
 
@@ -93,7 +143,7 @@ To enable the GPU depth rendering, set ENABLE_CUDA to true, and also remember to
 ``` 
 For installation of CUDA, please go to [CUDA ToolKit](https://developer.nvidia.com/cuda-toolkit)
 
-## 3. Run the Simulation
+## 4. Run Simulations
 
 Run [Rviz](http://wiki.ros.org/rviz) with our configuration firstly:
 
@@ -106,7 +156,7 @@ Run [Rviz](http://wiki.ros.org/rviz) with our configuration firstly:
 Then run the quadrotor simulator and __Fast-Planner__. 
 Several examples are provided below:
 
-### 3.1 Kinodynamic Path Searching & B-spline Optimization
+### Kinodynamic Path Searching & B-spline Optimization
 
 In this method, a kinodynamic path searching finds a safe, dynamically feasible, and minimum-time initial trajectory in the discretized control space. 
 Then the smoothness and clearance of the trajectory are improved by a B-spline optimization.
@@ -121,27 +171,15 @@ To test this method, run:
 Normally, you will find the randomly generated map and the drone model in ```Rviz```. At this time, you can trigger the planner using the ```2D Nav Goal``` tool. When a point is clicked in ```Rviz```, a new trajectory will be generated immediately and executed by the drone. A sample is displayed below:
 
 <!-- add some gif here -->
- <p align="center">
+ <p id="demo1" align="center">
   <img src="files/ral19_3.gif" width = "480" height = "270"/>
  </p>
 
-If you use this algorithm for your application or research, please cite our related paper:
+Related algorithms are detailed in [this paper](https://ieeexplore.ieee.org/document/8758904).
 
-- [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (**RA-L**), 2019.
-```
-@article{zhou2019robust,
-  title={Robust and efficient quadrotor trajectory generation for fast autonomous flight},
-  author={Zhou, Boyu and Gao, Fei and Wang, Luqi and Liu, Chuhao and Shen, Shaojie},
-  journal={IEEE Robotics and Automation Letters},
-  volume={4},
-  number={4},
-  pages={3529--3536},
-  year={2019},
-  publisher={IEEE}
-}
-```
 
-### 3.2 Topological Path Searching & Path-guided Optimization
+
+### Topological Path Searching & Path-guided Optimization
 
 This method features searching for multiple trajectories in distinctive topological classes. Thanks to the strategy, the solution space is explored more thoroughly, avoiding local minima and yielding better solutions.
 Similarly, run:
@@ -159,24 +197,15 @@ then you will find the random map generated and can use the ```2D Nav Goal``` to
   <img src="files/icra20_3.gif" width = "480" height = "270"/>
  </p>
 
-If you use this algorithm for your application or research, please cite our related paper:
+Related algorithms are detailed in [this paper](https://arxiv.org/abs/1912.12644).
 
-- [__Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths__](https://arxiv.org/abs/1912.12644), Boyu Zhou, Fei Gao, Jie Pan and Shaojie Shen, IEEE International Conference on Robotics and Automation (__ICRA__), 2020.
 
-```
-@article{zhou2019robust,
-  title={Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths},
-  author={Zhou, Boyu and Gao, Fei and Pan, Jie and Shen, Shaojie},
-  journal={arXiv preprint arXiv:1912.12644},
-  year={2019}
-}
-```
+### Perception-aware Replanning
 
-### 3.3 Perception-aware Replanning
+The code will be released after the publication of [associated paper](https://arxiv.org/abs/2007.03465).
 
-To appear.
 
-## 4. Use in Your Application
+## 5. Use in Your Application
 
 If you have successfully run the simulation and want to use __Fast-Planner__ in your project,
 please explore the files kino_replan.launch or topo_replan.launch.
@@ -186,14 +215,23 @@ Note that in our configuration, the size of depth image is 640x480.
 For higher map fusion efficiency we do downsampling (in kino_algorithm.xml, skip_pixel = 2).
 If you use depth images with lower resolution (like 256x144), you might disable the downsampling by setting skip_pixel = 1. Also, the _depth_scaling_factor_ is set to 1000, which may need to be changed according to your device.
 
-Finally, please kindly give a STAR to this repo if it helps your research or work, thanks! :)
+Finally, for setup problem, like compilation error caused by different versions of ROS/Eigen, please first refer to existing __issues__ or __Google__ before raising a new issue. Insignificant issue will receive no reply.
 
-## 5. Acknowledgements
+
+## 6. News
+
+- __July 5, 2020__: We will release the implementation of paper: _RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight_ (submitted to TRO, under review) in the future.
+
+- __April 12, 2020__: The implementation of the ICRA2020 paper: _Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths_ is available.
+
+- __Jan 30, 2020__: The volumetric mapping is integrated with our planner. It takes in depth image and camera pose pairs as input, do raycasting to fuse the measurements, and build a Euclidean signed distance field (ESDF) for the planning module.
+
+## Acknowledgements
   We use **NLopt** for non-linear optimization.
 
-## 6. Licence
+## Licence
 The source code is released under [GPLv3](http://www.gnu.org/licenses/) license.
 
 
-## 7. Disclaimer
+## Disclaimer
 This is research code, it is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of merchantability or fitness for a particular purpose.

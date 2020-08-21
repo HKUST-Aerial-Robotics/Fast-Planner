@@ -8,3 +8,17 @@
   year={2019},
   publisher={IEEE}
 }
+
+@article{zhou2019robust,
+  title={Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths},
+  author={Zhou, Boyu and Gao, Fei and Pan, Jie and Shen, Shaojie},
+  journal={arXiv preprint arXiv:1912.12644},
+  year={2019}
+}
+
+@article{zhou2020raptor,
+  title={RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight},
+  author={Zhou, Boyu and Pan, Jie and Gao, Fei and Shen, Shaojie},
+  journal={arXiv preprint arXiv:2007.03465},
+  year={2020}
+}

@@ -26,7 +26,7 @@ Demonstrations about this work have been reported on the IEEE Spectrum: [page1](
 
 Please kindly star :star: this project if it helps you. We take efforts to maintain it :grin::grin:.
 
-To run this project in minutes, check [Quick Start](#1-Quick-Start). Check other section for more detailed information.
+To run this project in minutes, check [Quick Start](#1-Quick-Start). Check other sections for more detailed information.
 
 
 

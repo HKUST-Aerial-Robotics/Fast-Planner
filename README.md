@@ -24,9 +24,10 @@ Complete videos:
 Demonstrations about this work have been reported on the IEEE Spectrum: [page1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [page2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot),
 [page3](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-soft-exoskeleton-glove-extra-thumb) (search for _HKUST_ in the pages).
 
-To run this project in minutes, check [Quick Start](#Quick-Start). Check other section for more detailed information.
+Please kindly star :star: this project if it helps you. We take efforts to maintain it :grin::grin:.
 
-Please kindly star:star: this project if it helps you. We take efforts to maintain it:grin::grin:.
+To run this project in minutes, check [Quick Start](#1-Quick-Start). Check other section for more detailed information.
+
 
 
 

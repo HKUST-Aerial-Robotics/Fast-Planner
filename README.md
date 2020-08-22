@@ -25,6 +25,7 @@ Demonstrations about this work have been reported on the IEEE Spectrum: [page1](
 [page3](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-soft-exoskeleton-glove-extra-thumb) (search for _HKUST_ in the pages).
 
 To run this project in minutes, check [Quick Start](#1-Quick-Start). Check other sections for more detailed information.
+
 Please kindly star :star: this project if it helps you. We take great efforts to develope and maintain it :grin::grin:.
 
 

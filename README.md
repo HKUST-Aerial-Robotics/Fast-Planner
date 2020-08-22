@@ -55,6 +55,7 @@ The project is developed and tested in Ubuntu 16.04, ROS Kinetic. Run the follow
   catkin_make
 ```
 
+You may check the detailed [instruction](#3-setup-and-config) to setup the project. 
 After compilation you can start the visualization by: 
 
 ```

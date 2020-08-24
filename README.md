@@ -124,13 +124,13 @@ After the prerequisites are satisfied, you can clone this repository to your cat
   catkin_make
 ```
 
-If you encounter problems in this step, most probably caused by different version of ROS/Eigen, please first refer to existing __issues__, __pull request__ and __Google__ before raising a new issue.
+If you encounter problems in this step, most probably caused by different versions of ROS/Eigen, please first refer to existing __issues__, __pull requests__ and __Google__ before raising a new issue.
 
 Now you are ready to [run a simulation](#4-run-simulations).
 
 ### Use GPU Depth Rendering (Optional)
 
-This step is not mandatory for running the simulations. However, if you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used (See section _Use GPU Depth Rendering_ below).
+This step is not mandatory for running the simulations. However, if you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used.
 
  The **local_sensing** package in __uav_simulator__ has the option of using GPU or CPU to render the depth sensor measurement. By default, it is set to CPU version in CMakeLists:
  

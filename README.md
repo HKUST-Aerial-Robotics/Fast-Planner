@@ -1,6 +1,6 @@
 # Fast-Planner
 
-**Fast-Planner** is developed aiming to enables quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. More features and interesting methods will come in the future :wink:.
+**Fast-Planner** is developed aiming to enable quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. More features and interesting methods will come in the future :wink:.
 
 __Authors__: [Boyu Zhou](http://boyuzhou.net) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/), [Fei Gao](https://ustfei.com/) from [ZJU FAST Lab](http://www.kivact.com/).
 <!-- - __B-spline trajectory optimization guided by topological paths__:
@@ -24,9 +24,11 @@ Complete videos:
 Demonstrations about this work have been reported on the IEEE Spectrum: [page1](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-nasa-lemur-robot), [page2](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-india-space-humanoid-robot),
 [page3](https://spectrum.ieee.org/automaton/robotics/robotics-hardware/video-friday-soft-exoskeleton-glove-extra-thumb) (search for _HKUST_ in the pages).
 
-Please kindly star :star: this project if it helps you. We take efforts to maintain it :grin::grin:.
+To run this project in minutes, check [Quick Start](#1-Quick-Start). Check other sections for more detailed information.
 
-To run this project in minutes, check [Quick Start](#1-Quick-Start). Check other section for more detailed information.
+Please kindly star :star: this project if it helps you. We take great efforts to develope and maintain it :grin::grin:.
+
+
 
 
 
@@ -53,6 +55,7 @@ The project is developed and tested in Ubuntu 16.04, ROS Kinetic. Run the follow
   catkin_make
 ```
 
+You may check the detailed [instruction](#3-setup-and-config) to setup the project. 
 After compilation you can start the visualization by: 
 
 ```
@@ -107,11 +110,8 @@ Besides the folder __fast_planner__, a lightweight __uav_simulator__ is used for
 sudo apt-get install libnlopt-dev libarmadillo-dev 
 ```
 
-
 2. Our software is developed and tested in Ubuntu 16.04, ROS Kinetic. Follow the [document](http://wiki.ros.org/kinetic/Installation/Ubuntu) to install ROS.
 
-
-3. _Optional_: If you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used (See section _Use GPU Depth Rendering_ below).
 
 ### Build on ROS
 
@@ -124,9 +124,13 @@ After the prerequisites are satisfied, you can clone this repository to your cat
   catkin_make
 ```
 
+If you encounter problems in this step, most probably caused by different versions of ROS/Eigen, please first refer to existing __issues__, __pull requests__ and __Google__ before raising a new issue.
+
 Now you are ready to [run a simulation](#4-run-simulations).
 
 ### Use GPU Depth Rendering (Optional)
+
+This step is not mandatory for running the simulations. However, if you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used.
 
  The **local_sensing** package in __uav_simulator__ has the option of using GPU or CPU to render the depth sensor measurement. By default, it is set to CPU version in CMakeLists:
  
@@ -216,7 +220,7 @@ Note that in our configuration, the size of depth image is 640x480.
 For higher map fusion efficiency we do downsampling (in kino_algorithm.xml, skip_pixel = 2).
 If you use depth images with lower resolution (like 256x144), you might disable the downsampling by setting skip_pixel = 1. Also, the _depth_scaling_factor_ is set to 1000, which may need to be changed according to your device.
 
-Finally, for setup problem, like compilation error caused by different versions of ROS/Eigen, please first refer to existing __issues__ or __Google__ before raising a new issue. Insignificant issue will receive no reply.
+Finally, for setup problem, like compilation error caused by different versions of ROS/Eigen, please first refer to existing __issues__, __pull request__, and __Google__ before raising a new issue. Insignificant issue will receive no reply.
 
 
 ## 6. News

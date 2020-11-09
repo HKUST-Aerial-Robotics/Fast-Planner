@@ -11,6 +11,7 @@ find_package(PCL 1.7 REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  mavros_msgs
   geometry_msgs
   quadrotor_msgs
   plan_env
@@ -20,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
   traj_utils
   message_generation
   cv_bridge
+
 )
 
 # Generate messages in the 'msg' folder

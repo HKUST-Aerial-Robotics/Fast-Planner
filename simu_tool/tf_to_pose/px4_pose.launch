@@ -2,7 +2,7 @@
     <!-- <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find ov_msckf)/launch/display_gazebo.rviz" />
  -->
     <node pkg="tf" type="static_transform_publisher" name="tf_global_local_origin"
-          args="0 0 0 0 0 0 global local_origin 100"/>
+          args="0 0 0 0 0 0 world local_origin 100"/>
     <node pkg="tf" type="static_transform_publisher" name="tf_fcu_base"
           args="0 0 0 0 0 0 fcu base_link 100"/>
     <node pkg="tf" type="static_transform_publisher" name="tf_depth_camera"

@@ -3,3 +3,5 @@ fast_planner/.vscode
 .clang-format
 
 simu_tool/tf_to_pose/cmake-build-debug/
+
+fast_planner/plan_manage/cmake-build-debug/

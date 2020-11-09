@@ -30,11 +30,25 @@
 #include "std_msgs/Empty.h"
 #include "visualization_msgs/Marker.h"
 #include <ros/ros.h>
+#include <geometry_msgs/PoseStamped.h>
+#include <mavros_msgs/Trajectory.h>
+#include <mavros_msgs/CompanionProcessStatus.h>
+enum class MAV_STATE {
+    MAV_STATE_UNINIT,
+    MAV_STATE_BOOT,
+    MAV_STATE_CALIBRATIN,
+    MAV_STATE_STANDBY,
+    MAV_STATE_ACTIVE,
+    MAV_STATE_CRITICAL,
+    MAV_STATE_EMERGENCY,
+    MAV_STATE_POWEROFF,
+    MAV_STATE_FLIGHT_TERMINATION,
+};
 
 ros::Publisher cmd_vis_pub, pos_cmd_pub, traj_pub;
-
+ros::Publisher trajectory_pub,mavros_system_status_pub;
 nav_msgs::Odometry odom;
-
+bool pub_flag=false;
 quadrotor_msgs::PositionCommand cmd;
 // double pos_gain[3] = {5.7, 5.7, 6.2};
 // double vel_gain[3] = {3.4, 3.4, 4.0};
@@ -199,9 +213,69 @@ void visCallback(const ros::TimerEvent& e) {
 
   displayTrajWithColor(traj_cmd_, 0.05, Eigen::Vector4d(0, 1, 0, 1), 2);
 }
+//lx add
+void fillUnusedTrajectorySetpoints(mavros_msgs::PositionTarget &point) {
+point.position.x = NAN;
+point.position.y = NAN;
+point.position.z = NAN;
+point.velocity.x = NAN;
+point.velocity.y = NAN;
+point.velocity.z = NAN;
+point.acceleration_or_force.x = NAN;
+point.acceleration_or_force.y = NAN;
+point.acceleration_or_force.z = NAN;
+point.yaw = NAN;
+point.yaw_rate = NAN;
+}
+//lx add
+void mavrosTrajectoryPub(quadrotor_msgs::PositionCommand cmd){
+    mavros_msgs::Trajectory setpoint;
+    setpoint.header.stamp = cmd.header.stamp;
+    setpoint.header.frame_id = "local_origin";
+    setpoint.type = 0;  // MAV_TRAJECTORY_REPRESENTATION::WAYPOINTS
+    setpoint.point_1.position.x = cmd.position.x;
+    setpoint.point_1.position.y = cmd.position.y;
+    setpoint.point_1.position.z = cmd.position.z;
+    setpoint.point_1.velocity.x = cmd.velocity.x;
+    setpoint.point_1.velocity.y = cmd.velocity.y;
+    setpoint.point_1.velocity.z = cmd.velocity.z;
+    setpoint.point_1.acceleration_or_force.x = cmd.acceleration.x;
+    setpoint.point_1.acceleration_or_force.y = cmd.acceleration.y;
+    setpoint.point_1.acceleration_or_force.z = cmd.acceleration.z;
+    setpoint.point_1.yaw = cmd.yaw;
+    setpoint.point_1.yaw_rate = cmd.yaw_dot;
 
+    fillUnusedTrajectorySetpoints(setpoint.point_2);
+    fillUnusedTrajectorySetpoints(setpoint.point_3);
+    fillUnusedTrajectorySetpoints(setpoint.point_4);
+    fillUnusedTrajectorySetpoints(setpoint.point_5);
+
+    setpoint.time_horizon = {NAN, NAN, NAN, NAN, NAN};
+
+    bool xy_pos_sp_valid = std::isfinite(setpoint.point_1.position.x) && std::isfinite(setpoint.point_1.position.y);
+    bool xy_vel_sp_valid = std::isfinite(setpoint.point_1.velocity.x) && std::isfinite(setpoint.point_1.velocity.y);
+
+
+    if ((xy_pos_sp_valid || xy_vel_sp_valid) &&
+          (std::isfinite(setpoint.point_1.position.z || std::isfinite(setpoint.point_1.velocity.z)))) {
+            setpoint.point_valid = {true, false, false, false, false};
+            ROS_INFO("mavrosTrajectoryPub setPoint is true");
+        } else {
+        setpoint.point_valid = {false, false, false, false, false};
+    }
+    trajectory_pub.publish(setpoint);
+}
+void publishSystemStatus() {
+    mavros_msgs::CompanionProcessStatus status_msg;
+    status_msg.state = static_cast<int>(MAV_STATE::MAV_STATE_ACTIVE);
+    status_msg.header.stamp = ros::Time::now();
+    status_msg.component = 196;  // MAV_COMPONENT_ID_AVOIDANCE we need to add a new component
+    mavros_system_status_pub.publish(status_msg);
+}
 void cmdCallback(const ros::TimerEvent& e) {
   /* no publishing before receive traj_ */
+  publishSystemStatus();
+
   if (!receive_traj_) return;
 
   ros::Time time_now = ros::Time::now();
@@ -266,6 +340,13 @@ void cmdCallback(const ros::TimerEvent& e) {
 
   pos_cmd_pub.publish(cmd);
 
+  //lx add
+  static int count=0;
+  if(++count>=5) {
+      pub_flag=true;
+      mavrosTrajectoryPub(cmd);
+      count=0;
+  }
   // draw cmd
 
   // drawCmd(pos, vel, 0, Eigen::Vector4d(0, 1, 0, 1));
@@ -278,7 +359,9 @@ void cmdCallback(const ros::TimerEvent& e) {
   traj_cmd_.push_back(pos);
   if (traj_cmd_.size() > 10000) traj_cmd_.erase(traj_cmd_.begin(), traj_cmd_.begin() + 1000);
 }
-
+void trajectoryCallback (const mavros_msgs::Trajectory &msg){
+    ROS_INFO("recevie trajectory desired!");
+}
 int main(int argc, char** argv) {
   ros::init(argc, argv, "traj_server");
   ros::NodeHandle node;
@@ -292,6 +375,10 @@ int main(int argc, char** argv) {
   cmd_vis_pub = node.advertise<visualization_msgs::Marker>("planning/position_cmd_vis", 10);
   pos_cmd_pub = node.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 50);
   traj_pub = node.advertise<visualization_msgs::Marker>("planning/travel_traj", 10);
+
+  mavros_system_status_pub=node.advertise<mavros_msgs::CompanionProcessStatus>("/mavros/companion_process/status", 1);
+  trajectory_pub = node.advertise<mavros_msgs::Trajectory>("/mavros/trajectory/generated", 10);
+  ros::Subscriber trajectory_sub = node.subscribe("/mavros/trajectory/desired", 1, &trajectoryCallback);
 
   ros::Timer cmd_timer = node.createTimer(ros::Duration(0.01), cmdCallback);
   ros::Timer vis_timer = node.createTimer(ros::Duration(0.25), visCallback);

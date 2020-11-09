@@ -73,7 +73,7 @@
     <param name="waypoint_type" value="manual-lonely-waypoint"/>    
   </node>
 
-  <!-- use simulator-->
+  <!-- use simulator
   <include file="$(find plan_manage)/launch/simulator.xml">
     <arg name="map_size_x_" value="$(arg map_size_x)"/>
     <arg name="map_size_y_" value="$(arg map_size_y)"/>
@@ -83,5 +83,5 @@
 
     <arg name="odometry_topic" value="$(arg odom_topic)" />
   </include>
-
+-->
 </launch>

@@ -36,6 +36,7 @@
 
     <!-- 1: use 2D Nav Goal to select goal  -->
     <!-- 2: use global waypoints below  -->
+    <!-- 3: use global waypoints below to set reference path --> 
     <arg name="flight_type" value="2" />
 
     <!-- global waypoints -->

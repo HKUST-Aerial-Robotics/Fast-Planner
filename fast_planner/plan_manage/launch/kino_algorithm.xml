@@ -56,14 +56,14 @@
     <param name="fsm/waypoint2_y" value="$(arg point2_y)" type="double"/>
     <param name="fsm/waypoint2_z" value="$(arg point2_z)" type="double"/>
 
-    <param name="sdf_map/resolution"      value="0.1" /> 
+    <param name="sdf_map/resolution"      value="0.2" /> 
     <param name="sdf_map/map_size_x"   value="$(arg map_size_x_)" /> 
     <param name="sdf_map/map_size_y"   value="$(arg map_size_y_)" /> 
     <param name="sdf_map/map_size_z"   value="$(arg map_size_z_)" /> 
-    <param name="sdf_map/local_update_range_x"  value="5.5" /> 
-    <param name="sdf_map/local_update_range_y"  value="5.5" /> 
+    <param name="sdf_map/local_update_range_x"  value="10" /> 
+    <param name="sdf_map/local_update_range_y"  value="10" /> 
     <param name="sdf_map/local_update_range_z"  value="4.5" /> 
-    <param name="sdf_map/obstacles_inflation"     value="0.099" /> 
+    <param name="sdf_map/obstacles_inflation"     value="0.2" /> 
     <param name="sdf_map/local_bound_inflate"    value="0.0"/>
     <param name="sdf_map/local_map_margin" value="50"/>
     <param name="sdf_map/ground_height"        value="-1.0"/>
@@ -75,7 +75,7 @@
     <!-- depth filter -->
     <param name="sdf_map/use_depth_filter" value="true"/>
     <param name="sdf_map/depth_filter_tolerance" value="0.15"/>
-    <param name="sdf_map/depth_filter_maxdist"   value="5.0"/>
+    <param name="sdf_map/depth_filter_maxdist"   value="10.0"/>
     <param name="sdf_map/depth_filter_mindist"   value="0.2"/>
     <param name="sdf_map/depth_filter_margin"    value="2"/>
     <param name="sdf_map/k_depth_scaling_factor" value="1000.0"/>
@@ -87,7 +87,7 @@
     <param name="sdf_map/p_max"  value="0.90"/>
     <param name="sdf_map/p_occ"  value="0.80"/>
     <param name="sdf_map/min_ray_length" value="0.5"/>
-    <param name="sdf_map/max_ray_length" value="4.5"/>
+    <param name="sdf_map/max_ray_length" value="10.0"/>
 
     <param name="sdf_map/esdf_slice_height" value="0.3"/>
     <param name="sdf_map/visualization_truncate_height"   value="2.49"/>

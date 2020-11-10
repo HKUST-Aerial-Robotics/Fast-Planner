@@ -292,6 +292,24 @@ void toEulerAngle(const Eigen::Quaterniond& q, double& roll, double& pitch, doub
     double cosy_cosp = +1.0 - 2.0 * (q.y() * q.y() + q.z() * q.z());
     yaw = atan2(siny_cosp, cosy_cosp);
 }
+double compute_diff_yaw(double tar_yaw,double cur_yaw){
+    double diff_yaw = tar_yaw - cur_yaw;
+    if (diff_yaw > M_PI)diff_yaw = -2 * M_PI + diff_yaw;
+    else if (diff_yaw < -M_PI)diff_yaw = 2 * M_PI + diff_yaw;
+    return diff_yaw;
+}
+double compute_odom_yaw(){
+    Eigen::Quaterniond q(odom.pose.pose.orientation.w,
+                         odom.pose.pose.orientation.x,
+                         odom.pose.pose.orientation.y,
+                         odom.pose.pose.orientation.z);
+    Eigen::Vector3d angle;
+    toEulerAngle(q, angle[0], angle[1], angle[2]);
+    return angle[2];
+}
+double compute_diff_yaw_with_odom(double tar_yaw){
+    compute_diff_yaw(tar_yaw,compute_odom_yaw());
+}
 void cmdCallback(const ros::TimerEvent& e) {
   /* no publishing before receive traj_ */
   publishSystemStatus();
@@ -303,8 +321,6 @@ void cmdCallback(const ros::TimerEvent& e) {
 
   Eigen::Vector3d pos, vel, acc, pos_f;
   double yaw, yawdot;
-  static double time_wait_yaw=0.f;
-
   if (t_cur < traj_duration_ && t_cur >= 0.0) {
 
    //lx add control yaw
@@ -316,35 +332,6 @@ void cmdCallback(const ros::TimerEvent& e) {
     yawdot = traj_[4].evaluateDeBoorT(t_cur)[0];
     double tf = min(traj_duration_, t_cur + 2.0);
     pos_f = traj_[0].evaluateDeBoorT(tf);
-//      {
-//          Eigen::Quaterniond q(odom.pose.pose.orientation.w,
-//                               odom.pose.pose.orientation.x,
-//                               odom.pose.pose.orientation.y,
-//                               odom.pose.pose.orientation.z);
-//          Eigen::Vector3d angle;
-//          toEulerAngle(q, angle[0], angle[1], angle[2]);
-//          double move_direct;
-//          auto pos_err = pos_f - pos;
-//           if (pos_err.norm() > 1e-3) {
-//               move_direct = atan2(pos_err(1), pos_err(0));
-//           } else {
-//               move_direct = last_yaw_;
-//           }
-//          //ROS_INFO("tar yaw:%f, cur yaw:%f",yaw,angle[2]);
-//          double diff_yaw = move_direct - angle[2];
-//          if (diff_yaw > M_PI)diff_yaw = 2 * M_PI - diff_yaw;
-//          else if (diff_yaw < -M_PI)diff_yaw = 2 * M_PI + diff_yaw;
-//          if (abs(diff_yaw) > 10.0 * M_PI / 180) {
-//
-//              ROS_INFO("move_direct yaw:%f, cur yaw:%f  diff_yaw:%f", move_direct, angle[2],diff_yaw);
-//              ROS_INFO("WAIT YAW");
-//              time_wait_yaw = t_cur;
-//          } else {
-//              time_wait_yaw = traj_duration_;
-//          }
-//      }
-
-
 
   } else if (t_cur >= traj_duration_) {
     /* hover when finish traj_ */
@@ -355,9 +342,7 @@ void cmdCallback(const ros::TimerEvent& e) {
     yawdot = traj_[4].evaluateDeBoorT(traj_duration_)[0];
 
     pos_f = pos;
-    time_wait_yaw=traj_duration_;
   } else {
-    time_wait_yaw=traj_duration_;
     cout << "[Traj server]: invalid time." << endl;
   }
 

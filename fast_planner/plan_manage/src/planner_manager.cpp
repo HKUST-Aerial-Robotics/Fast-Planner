@@ -610,8 +610,9 @@ void FastPlannerManager::planYaw(const Eigen::Vector3d& start_yaw) {
 
   auto&  pos      = local_data_.position_traj_;
   double duration = pos.getTimeSum();
-
-  double dt_yaw  = 0.3;
+  //lx change
+  //double dt_yaw  = 0.3;
+  double dt_yaw  = pp_.max_jerk_;
   int    seg_num = ceil(duration / dt_yaw);
   dt_yaw         = duration / seg_num;
 

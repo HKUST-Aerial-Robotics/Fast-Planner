@@ -11,18 +11,22 @@
 #include <deque>
 #include <boost/format.hpp>
 #include <eigen3/Eigen/Dense>
-
+#include <mavros_msgs/Trajectory.h>
+#include <mavros_msgs/SetMode.h>
+#include <mavros_msgs/State.h>
 using namespace std;
 using bfmt = boost::format;
 
 ros::Publisher pub1;
 ros::Publisher pub2;
 ros::Publisher pub3;
+ros::ServiceClient set_mode_client;
 string waypoint_type = string("manual");
 bool is_odom_ready;
 nav_msgs::Odometry odom;
 nav_msgs::Path waypoints;
-
+mavros_msgs::SetMode offb_set_mode;
+mavros_msgs::State cur_state;
 // series waypoint needed
 std::deque<nav_msgs::Path> waypointSegments;
 ros::Time trigged_time;
@@ -205,7 +209,37 @@ void goal_callback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
         }
     }
 }
+void stateCallback(const mavros_msgs::State &msg) {
+    ROS_INFO("recevie mavros state!");
+    cur_state=msg;
+}
+void mavros_goal_callback (const mavros_msgs::Trajectory &msg){
+    ROS_INFO("recevie trajectory desired!");
+    if (!is_odom_ready) {
+        ROS_ERROR("[waypoint_generator] No odom!");
+        return;
+    }
 
+    static Eigen::Vector3d last_goal(0,0,0);
+    Eigen::Vector3d this_goal(msg.point_2.position.x,msg.point_2.position.y,msg.point_2.position.z);
+    if((last_goal-this_goal).norm()<=0.01)return;
+
+    last_goal=this_goal;
+    if (msg.point_2.position.z > -0.1) {
+        // if height > 0, it's a valid goal;
+
+
+        geometry_msgs::PoseStamped pt;
+        pt.header=msg.header;
+        pt.pose.position=msg.point_2.position;
+        //pt.pose.position.z=1.0;//TODO
+        waypoints.poses.clear();
+        waypoints.poses.push_back(pt);
+        publish_waypoints_vis();
+        publish_waypoints();
+    }
+
+}
 void traj_start_trigger_callback(const geometry_msgs::PoseStamped& msg) {
     if (!is_odom_ready) {
         ROS_ERROR("[waypoint_generator] No odom!");
@@ -245,14 +279,33 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "waypoint_generator");
     ros::NodeHandle n("~");
     n.param("waypoint_type", waypoint_type, string("manual"));
+
+    offb_set_mode.request.custom_mode = "OFFBOARD";
+
     ros::Subscriber sub1 = n.subscribe("odom", 10, odom_callback);
     ros::Subscriber sub2 = n.subscribe("goal", 10, goal_callback);
     ros::Subscriber sub3 = n.subscribe("traj_start_trigger", 10, traj_start_trigger_callback);
+    ros::Subscriber state_sub = n.subscribe("mavros/state", 1, &stateCallback);
+    ros::Subscriber trajectory_sub = n.subscribe("/mavros/trajectory/desired", 1, &mavros_goal_callback);
+
     pub1 = n.advertise<nav_msgs::Path>("waypoints", 50);
     pub2 = n.advertise<geometry_msgs::PoseArray>("waypoints_vis", 10);
 
-    trigged_time = ros::Time(0);
+    set_mode_client = n.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
 
+    trigged_time = ros::Time(0);
+    ros::Rate rate(10.0);
+    while(ros::ok() ) {
+        if(cur_state.mode!= "OFFBOARD"){
+            ROS_INFO("setting  OFFBOARD !");
+            if( set_mode_client.call(offb_set_mode) &&
+                offb_set_mode.response.mode_sent){
+                ROS_INFO("Offboard enabled");
+            }
+        }
+        ros::spinOnce();
+        rate.sleep();
+    }
     ros::spin();
     return 0;
 }

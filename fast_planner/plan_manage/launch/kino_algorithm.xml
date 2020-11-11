@@ -62,7 +62,7 @@
     <param name="sdf_map/map_size_z"   value="$(arg map_size_z_)" /> 
     <param name="sdf_map/local_update_range_x"  value="10" /> 
     <param name="sdf_map/local_update_range_y"  value="10" /> 
-    <param name="sdf_map/local_update_range_z"  value="4.5" /> 
+    <param name="sdf_map/local_update_range_z"  value="8.0" /> 
     <param name="sdf_map/obstacles_inflation"     value="0.2" /> 
     <param name="sdf_map/local_bound_inflate"    value="0.0"/>
     <param name="sdf_map/local_map_margin" value="50"/>
@@ -90,8 +90,8 @@
     <param name="sdf_map/max_ray_length" value="10.0"/>
 
     <param name="sdf_map/esdf_slice_height" value="0.3"/>
-    <param name="sdf_map/visualization_truncate_height"   value="2.49"/>
-    <param name="sdf_map/virtual_ceil_height"   value="2.5"/>
+    <param name="sdf_map/visualization_truncate_height"   value="8.0"/>
+    <param name="sdf_map/virtual_ceil_height"   value="8.0"/>
     <param name="sdf_map/show_occ_time"  value="false"/>
     <param name="sdf_map/show_esdf_time" value="false"/>
     <param name="sdf_map/pose_type"     value="1"/>  

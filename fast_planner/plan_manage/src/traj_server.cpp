@@ -48,6 +48,7 @@ enum class MAV_STATE {
 ros::Publisher cmd_vis_pub, pos_cmd_pub, traj_pub;
 ros::Publisher trajectory_pub,mavros_system_status_pub;
 nav_msgs::Odometry odom;
+
 bool pub_flag=false;
 quadrotor_msgs::PositionCommand cmd;
 // double pos_gain[3] = {5.7, 5.7, 6.2};
@@ -397,9 +398,9 @@ void cmdCallback(const ros::TimerEvent& e) {
   traj_cmd_.push_back(pos);
   if (traj_cmd_.size() > 10000) traj_cmd_.erase(traj_cmd_.begin(), traj_cmd_.begin() + 1000);
 }
-void trajectoryCallback (const mavros_msgs::Trajectory &msg){
-    ROS_INFO("recevie trajectory desired!");
-}
+//void trajectoryCallback (const mavros_msgs::Trajectory &msg){
+//    ROS_INFO("recevie trajectory desired!");
+//}
 int main(int argc, char** argv) {
   ros::init(argc, argv, "traj_server");
   ros::NodeHandle node;
@@ -416,7 +417,7 @@ int main(int argc, char** argv) {
 
   mavros_system_status_pub=node.advertise<mavros_msgs::CompanionProcessStatus>("/mavros/companion_process/status", 1);
   trajectory_pub = node.advertise<mavros_msgs::Trajectory>("/mavros/trajectory/generated", 10);
-  ros::Subscriber trajectory_sub = node.subscribe("/mavros/trajectory/desired", 1, &trajectoryCallback);
+  //ros::Subscriber trajectory_sub = node.subscribe("/mavros/trajectory/desired", 1, &trajectoryCallback);
 
   ros::Timer cmd_timer = node.createTimer(ros::Duration(0.01), cmdCallback);
   ros::Timer vis_timer = node.createTimer(ros::Duration(0.25), visCallback);

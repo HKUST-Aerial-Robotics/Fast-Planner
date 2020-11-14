@@ -237,14 +237,14 @@ void mavrosTrajectoryPub(quadrotor_msgs::PositionCommand cmd){
     setpoint.point_1.position.x = cmd.position.x;
     setpoint.point_1.position.y = cmd.position.y;
     setpoint.point_1.position.z = cmd.position.z;
-    setpoint.point_1.velocity.x = cmd.velocity.x;
-    setpoint.point_1.velocity.y = cmd.velocity.y;
-    setpoint.point_1.velocity.z = cmd.velocity.z;
-    setpoint.point_1.acceleration_or_force.x = cmd.acceleration.x;
-    setpoint.point_1.acceleration_or_force.y = cmd.acceleration.y;
-    setpoint.point_1.acceleration_or_force.z = cmd.acceleration.z;
+    setpoint.point_1.velocity.x = NAN;
+    setpoint.point_1.velocity.y = NAN;
+    setpoint.point_1.velocity.z = NAN;
+    setpoint.point_1.acceleration_or_force.x = NAN;
+    setpoint.point_1.acceleration_or_force.y = NAN;
+    setpoint.point_1.acceleration_or_force.z = NAN;
     setpoint.point_1.yaw = cmd.yaw;
-    setpoint.point_1.yaw_rate = cmd.yaw_dot;
+    setpoint.point_1.yaw_rate = NAN;
 
     fillUnusedTrajectorySetpoints(setpoint.point_2);
     fillUnusedTrajectorySetpoints(setpoint.point_3);

@@ -12,6 +12,7 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /PointCloud21
+        - /PoseArray1
       Splitter Ratio: 0.5
     Tree Height: 557
   - Class: rviz/Selection
@@ -361,22 +362,16 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: true
-        base_link_frd:
-          Value: false
         camera_link:
           Value: false
         fcu:
           Value: false
+        fcu_frd:
+          Value: true
         local_origin:
           Value: false
-        map:
-          Value: false
-        map_ned:
-          Value: false
-        odom:
-          Value: false
-        odom_ned:
-          Value: false
+        local_origin_ned:
+          Value: true
         world:
           Value: false
       Marker Scale: 5
@@ -389,16 +384,17 @@ Visualization Manager:
           local_origin:
             fcu:
               base_link:
-                base_link_frd:
-                  {}
                 camera_link:
                   {}
+            local_origin_ned:
+              fcu_frd:
+                {}
       Update Interval: 0
       Value: true
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.29999995
+        Max Value: 5.30000019
         Min Value: -0.5
         Value: true
       Axis: Z
@@ -426,7 +422,7 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Alpha: 1
-      Arrow Length: 0.300000012
+      Arrow Length: 1
       Axes Length: 0.300000012
       Axes Radius: 0.00999999978
       Class: rviz/PoseArray
@@ -465,25 +461,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 31.2572174
+      Distance: 31.3721294
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.691794634
-        Y: -4.44290304
-        Z: 1.90734863e-06
+        X: 10.0041523
+        Y: -3.97435617
+        Z: 6.37005905e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.09479678
+      Pitch: 0.694797516
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 3.92539525
+      Yaw: 4.94539404
     Saved:
       - Class: rviz/ThirdPersonFollower
         Distance: 17.4853859

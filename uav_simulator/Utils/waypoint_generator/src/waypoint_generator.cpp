@@ -219,6 +219,7 @@ void mavros_goal_callback (const mavros_msgs::Trajectory &msg){
         ROS_ERROR("[waypoint_generator] No odom!");
         return;
     }
+    //if(cur_state.mode != "AUTO.MISSION") return;
 
     static Eigen::Vector3d last_goal(0,0,0);
     Eigen::Vector3d this_goal(msg.point_2.position.x,msg.point_2.position.y,msg.point_2.position.z);
@@ -295,17 +296,17 @@ int main(int argc, char** argv) {
 
     trigged_time = ros::Time(0);
     ros::Rate rate(10.0);
-    while(ros::ok() ) {
-        if(cur_state.mode!= "OFFBOARD"){
-            ROS_INFO("setting  OFFBOARD !");
-            if( set_mode_client.call(offb_set_mode) &&
-                offb_set_mode.response.mode_sent){
-                ROS_INFO("Offboard enabled");
-            }
-        }
-        ros::spinOnce();
-        rate.sleep();
-    }
+//    while(ros::ok() ) {
+//        if(cur_state.mode!= "OFFBOARD"){
+//            ROS_INFO("setting  OFFBOARD !");
+//            if( set_mode_client.call(offb_set_mode) &&
+//                offb_set_mode.response.mode_sent){
+//                ROS_INFO("Offboard enabled");
+//            }
+//        }
+//        ros::spinOnce();
+//        rate.sleep();
+//    }
     ros::spin();
     return 0;
 }

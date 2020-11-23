@@ -442,6 +442,7 @@ void FastPlannerManager::reparamBspline(NonUniformBspline& bspline, double ratio
   // double length = bspline.getLength(0.1);
   // int seg_num = ceil(length / pp_.ctrl_pt_dist);
 
+  ratio = min(1.01, ratio);
   bspline.lengthenTime(ratio);
   double duration = bspline.getTimeSum();
   dt              = duration / double(seg_num);

@@ -348,7 +348,7 @@ bool KinoReplanFSM::callKinodynamicReplan() {
     /* visulization */
     auto plan_data = &planner_manager_->plan_data_;
     visualization_->drawGeometricPath(plan_data->kino_path_, 0.075, Eigen::Vector4d(1, 1, 0, 0.4));
-    visualization_->drawBspline(info->position_traj_, 0.1, Eigen::Vector4d(1.0, 0, 0.0, 1), false, 0.2,
+    visualization_->drawBspline(info->position_traj_, 0.1, Eigen::Vector4d(1.0, 0, 0.0, 1), true, 0.2,
                                 Eigen::Vector4d(1, 0, 0, 1));
 
     return true;

@@ -9,8 +9,9 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   visualization_msgs
-  plan_env
   cv_bridge
+  nlopt
+  plan_env
 )
 
 catkin_package(
@@ -35,5 +36,4 @@ add_library( bspline_opt
     )
 target_link_libraries( bspline_opt
     ${catkin_LIBRARIES} 
-    /usr/local/lib/libnlopt.so
     )  

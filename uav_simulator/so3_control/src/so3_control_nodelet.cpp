@@ -214,5 +214,4 @@ SO3ControlNodelet::onInit(void)
 }
 
 #include <pluginlib/class_list_macros.h>
-PLUGINLIB_DECLARE_CLASS(so3_control, SO3ControlNodelet, SO3ControlNodelet,
-                        nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(SO3ControlNodelet, nodelet::Nodelet);

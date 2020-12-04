@@ -1,42 +1,19 @@
-/**
-* This file is part of Fast-Planner.
-*
-* Copyright 2019 Boyu Zhou, Aerial Robotics Group, Hong Kong University of Science and Technology, <uav.ust.hk>
-* Developed by Boyu Zhou <bzhouai at connect dot ust dot hk>, <uv dot boyuzhou at gmail dot com>
-* for more information see <https://github.com/HKUST-Aerial-Robotics/Fast-Planner>.
-* If you use this code, please cite the respective publications as
-* listed on the above website.
-*
-* Fast-Planner is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Fast-Planner is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License
-* along with Fast-Planner. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
-
 #ifndef _KINODYNAMIC_ASTAR_H
 #define _KINODYNAMIC_ASTAR_H
 
-#include <Eigen/Eigen>
-#include <iostream>
-#include <map>
+// #include <path_searching/matrix_hash.h>
 #include <ros/console.h>
 #include <ros/ros.h>
+#include <Eigen/Eigen>
+#include <boost/functional/hash.hpp>
+#include <iostream>
+#include <map>
+#include <queue>
 #include <string>
 #include <unordered_map>
-// #include "grad_spline/sdf_map.h"
+#include <utility>
 #include "plan_env/edt_environment.h"
-#include <boost/functional/hash.hpp>
-#include <queue>
+
 namespace fast_planner {
 // #define REACH_HORIZON 1
 // #define REACH_END 2
@@ -47,7 +24,7 @@ namespace fast_planner {
 #define inf 1 >> 30
 
 class PathNode {
-public:
+ public:
   /* -------------------- */
   Eigen::Vector3i index;
   Eigen::Matrix<double, 6, 1> state;
@@ -65,11 +42,12 @@ public:
     node_state = NOT_EXPAND;
   }
   ~PathNode(){};
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 typedef PathNode* PathNodePtr;
 
 class NodeComparator {
-public:
+ public:
   bool operator()(PathNodePtr node1, PathNodePtr node2) {
     return node1->f_score > node2->f_score;
   }
@@ -81,28 +59,30 @@ struct matrix_hash : std::unary_function<T, size_t> {
     size_t seed = 0;
     for (size_t i = 0; i < matrix.size(); ++i) {
       auto elem = *(matrix.data() + i);
-      seed ^= std::hash<typename T::Scalar>()(elem) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+      seed ^= std::hash<typename T::Scalar>()(elem) + 0x9e3779b9 + (seed << 6) +
+              (seed >> 2);
     }
     return seed;
   }
 };
 
 class NodeHashTable {
-private:
+ private:
   /* data */
-  std::unordered_map<Eigen::Vector3i, PathNodePtr, matrix_hash<Eigen::Vector3i>> data_3d_;
-  std::unordered_map<Eigen::Vector4i, PathNodePtr, matrix_hash<Eigen::Vector4i>> data_4d_;
+  std::unordered_map<Eigen::Vector3i, PathNodePtr, matrix_hash<Eigen::Vector3i>>
+      data_3d_;
+  std::unordered_map<Eigen::Vector4i, PathNodePtr, matrix_hash<Eigen::Vector4i>>
+      data_4d_;
 
-public:
-  NodeHashTable(/* args */) {
-  }
-  ~NodeHashTable() {
-  }
+ public:
+  NodeHashTable(/* args */) {}
+  ~NodeHashTable() {}
   void insert(Eigen::Vector3i idx, PathNodePtr node) {
-    data_3d_.insert(make_pair(idx, node));
+    data_3d_.insert(std::make_pair(idx, node));
   }
   void insert(Eigen::Vector3i idx, int time_idx, PathNodePtr node) {
-    data_4d_.insert(make_pair(Eigen::Vector4i(idx(0), idx(1), idx(2), time_idx), node));
+    data_4d_.insert(std::make_pair(
+        Eigen::Vector4i(idx(0), idx(1), idx(2), time_idx), node));
   }
 
   PathNodePtr find(Eigen::Vector3i idx) {
@@ -110,7 +90,8 @@ public:
     return iter == data_3d_.end() ? NULL : iter->second;
   }
   PathNodePtr find(Eigen::Vector3i idx, int time_idx) {
-    auto iter = data_4d_.find(Eigen::Vector4i(idx(0), idx(1), idx(2), time_idx));
+    auto iter =
+        data_4d_.find(Eigen::Vector4i(idx(0), idx(1), idx(2), time_idx));
     return iter == data_4d_.end() ? NULL : iter->second;
   }
 
@@ -121,12 +102,13 @@ public:
 };
 
 class KinodynamicAstar {
-private:
+ private:
   /* ---------- main data structure ---------- */
   vector<PathNodePtr> path_node_pool_;
   int use_node_num_, iter_num_;
   NodeHashTable expanded_nodes_;
-  std::priority_queue<PathNodePtr, std::vector<PathNodePtr>, NodeComparator> open_set_;
+  std::priority_queue<PathNodePtr, std::vector<PathNodePtr>, NodeComparator>
+      open_set_;
   std::vector<PathNodePtr> path_nodes_;
 
   /* ---------- record data ---------- */
@@ -141,17 +123,13 @@ private:
 
   /* ---------- parameter ---------- */
   /* search */
-  double max_tau_ = 0.25;
-  double init_max_tau_ = 0.8;
-  double max_vel_ = 3.0;
-  double max_acc_ = 3.0;
-  double w_time_ = 10.0;
-  double horizon_;
-  double lambda_heu_;
-  double margin_;
-  int allocate_num_;
-  int check_num_;
-  double tie_breaker_ = 1.0 + 1.0 / 10000;
+  double max_tau_, init_max_tau_;
+  double max_vel_, max_acc_;
+  double w_time_, horizon_, lambda_heu_;
+  int allocate_num_, check_num_;
+  double tie_breaker_;
+  bool optimistic_;
+
   /* map */
   double resolution_, inv_resolution_, time_resolution_, inv_time_resolution_;
   Eigen::Vector3d origin_, map_size_3d_;
@@ -165,25 +143,29 @@ private:
   /* shot trajectory */
   vector<double> cubic(double a, double b, double c, double d);
   vector<double> quartic(double a, double b, double c, double d, double e);
-  bool computeShotTraj(Eigen::VectorXd state1, Eigen::VectorXd state2, double time_to_goal);
-  double estimateHeuristic(Eigen::VectorXd x1, Eigen::VectorXd x2, double& optimal_time);
+  bool computeShotTraj(Eigen::VectorXd state1, Eigen::VectorXd state2,
+                       double time_to_goal);
+  double estimateHeuristic(Eigen::VectorXd x1, Eigen::VectorXd x2,
+                           double& optimal_time);
 
   /* state propagation */
-  void stateTransit(Eigen::Matrix<double, 6, 1>& state0, Eigen::Matrix<double, 6, 1>& state1,
-                    Eigen::Vector3d um, double tau);
+  void stateTransit(Eigen::Matrix<double, 6, 1>& state0,
+                    Eigen::Matrix<double, 6, 1>& state1, Eigen::Vector3d um,
+                    double tau);
 
-public:
+ public:
   KinodynamicAstar(){};
   ~KinodynamicAstar();
 
-  enum { REACH_HORIZON = 1, REACH_END = 2, NO_PATH = 3 };
+  enum { REACH_HORIZON = 1, REACH_END = 2, NO_PATH = 3, NEAR_END = 4 };
 
   /* main API */
   void setParam(ros::NodeHandle& nh);
   void init();
   void reset();
-  int search(Eigen::Vector3d start_pt, Eigen::Vector3d start_vel, Eigen::Vector3d start_acc,
-             Eigen::Vector3d end_pt, Eigen::Vector3d end_vel, bool init, bool dynamic = false,
+  int search(Eigen::Vector3d start_pt, Eigen::Vector3d start_vel,
+             Eigen::Vector3d start_acc, Eigen::Vector3d end_pt,
+             Eigen::Vector3d end_vel, bool init, bool dynamic = false,
              double time_start = -1.0);
 
   void setEnvironment(const EDTEnvironment::Ptr& env);
@@ -196,6 +178,8 @@ public:
   std::vector<PathNodePtr> getVisitedNodes();
 
   typedef shared_ptr<KinodynamicAstar> Ptr;
+
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 }  // namespace fast_planner

@@ -1,6 +1,8 @@
 # Fast-Planner
 
-**Fast-Planner** is developed aiming to enable quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. More features and interesting methods will come in the future :wink:.
+**Fast-Planner** is developed aiming to enable quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. 
+
+**News**: __Oct 20, 2020__: Fast-Planner is extended and applied to fast autonomous exploration. Check this [repo](https://github.com/HKUST-Aerial-Robotics/FUEL) for more details.
 
 __Authors__: [Boyu Zhou](http://boyuzhou.net) and [Shaojie Shen](http://uav.ust.hk/group/) from the [HUKST Aerial Robotics Group](http://uav.ust.hk/), [Fei Gao](https://ustfei.com/) from [ZJU FAST Lab](http://www.kivact.com/).
 <!-- - __B-spline trajectory optimization guided by topological paths__:
@@ -40,18 +42,18 @@ Please kindly star :star: this project if it helps you. We take great efforts to
 * [Setup and Config](#3-Setup-and-Config)
 * [Run Simulations](#4-run-simulations)
 * [Use in Your Application](#5-use-in-your-application)
-* [News](#6-news)
+* [Updates](#6-updates)
 
 
 ## 1. Quick Start
 
-The project is developed and tested in Ubuntu 16.04, ROS Kinetic. Run the following commands to setup:
+The project has been tested on Ubuntu 16.04(ROS Kinetic) and 18.04(ROS Melodic). Take Ubuntu 18.04 as an example, run the following commands to setup:
 
 ```
-  sudo apt-get install libnlopt-dev libarmadillo-dev
+  sudo apt-get install libarmadillo-dev ros-melodic-nlopt
   cd ${YOUR_WORKSPACE_PATH}/src
   git clone https://github.com/HKUST-Aerial-Robotics/Fast-Planner.git
-  cd ../
+  cd ../ 
   catkin_make
 ```
 
@@ -59,13 +61,11 @@ You may check the detailed [instruction](#3-setup-and-config) to setup the proje
 After compilation you can start the visualization by: 
 
 ```
-  source devel/setup.bash
-  roslaunch plan_manage rviz.launch
+  source devel/setup.bash && roslaunch plan_manage rviz.launch
 ```
 and start a simulation (run in a new terminals): 
 ```
-  source devel/setup.bash
-  roslaunch plan_manage kino_replan.launch
+  source devel/setup.bash && roslaunch plan_manage kino_replan.launch
 ```
 You will find the random map and the drone in ```Rviz```. You can select goals for the drone to reach using the ```2D Nav Goal``` tool. A sample simulation is showed [here](#demo1).
 
@@ -84,7 +84,7 @@ Please cite at least one of our papers if you use this project in your research:
 
 - [__Robust and Efficient Quadrotor Trajectory Generation for Fast Autonomous Flight__](https://ieeexplore.ieee.org/document/8758904), Boyu Zhou, Fei Gao, Luqi Wang, Chuhao Liu and Shaojie Shen, IEEE Robotics and Automation Letters (**RA-L**), 2019.
 - [__Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths__](https://arxiv.org/abs/1912.12644), Boyu Zhou, Fei Gao, Jie Pan and Shaojie Shen, IEEE International Conference on Robotics and Automation (__ICRA__), 2020.
-- [__RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight__](https://arxiv.org/abs/2007.03465), Boyu Zhou, Jie Pan, Fei Gao and Shaojie Shen, submitted to IEEE Transactions on Robotics (__T-RO__), under review. 
+- [__RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight__](https://arxiv.org/abs/2007.03465), Boyu Zhou, Jie Pan, Fei Gao and Shaojie Shen, submitted to IEEE Transactions on Robotics (__T-RO__), under review, conditionally accepted. 
 
 
 All planning algorithms along with other key modules, such as mapping, are implemented in __fast_planner__:
@@ -105,12 +105,13 @@ Besides the folder __fast_planner__, a lightweight __uav_simulator__ is used for
 
 ### Prerequisites
 
-1. We use [**NLopt**](https://nlopt.readthedocs.io/en/latest/NLopt_Installation) to solve the non-linear optimization problem. The __uav_simulator__ depends on the C++ linear algebra library __Armadillo__. The two dependencies can be installed by 
+1. Our software is developed and tested in Ubuntu 16.04(ROS Kinetic) and 18.04(ROS Melodic). Follow the documents to install [Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu) or [Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) according to your Ubuntu version.
+   
+2. We use [**NLopt**](https://nlopt.readthedocs.io/en/latest/NLopt_Installation) to solve the non-linear optimization problem. The __uav_simulator__ depends on the C++ linear algebra library __Armadillo__. The two dependencies can be installed by the following command, in which `${ROS_VERSION_NAME}` is the name of your ROS release.
 ``` 
-sudo apt-get install libnlopt-dev libarmadillo-dev 
+sudo apt-get install libarmadillo-dev ros_${ROS_VERSION_NAME}_nlopt
 ```
 
-2. Our software is developed and tested in Ubuntu 16.04, ROS Kinetic. Follow the [document](http://wiki.ros.org/kinetic/Installation/Ubuntu) to install ROS.
 
 
 ### Build on ROS
@@ -124,11 +125,11 @@ After the prerequisites are satisfied, you can clone this repository to your cat
   catkin_make
 ```
 
-If you encounter problems in this step, most probably caused by different versions of ROS/Eigen, please first refer to existing __issues__, __pull requests__ and __Google__ before raising a new issue.
+If you encounter problems in this step, please first refer to existing __issues__, __pull requests__ and __Google__ before raising a new issue.
 
 Now you are ready to [run a simulation](#4-run-simulations).
 
-### Use GPU Depth Rendering (Optional)
+### Use GPU Depth Rendering (can be skipped optionally)
 
 This step is not mandatory for running the simulations. However, if you want to run the more realistic depth camera in __uav_simulator__, installation of [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) is needed. Otherwise, a less realistic depth sensor model will be used.
 
@@ -223,8 +224,10 @@ If you use depth images with lower resolution (like 256x144), you might disable 
 Finally, for setup problem, like compilation error caused by different versions of ROS/Eigen, please first refer to existing __issues__, __pull request__, and __Google__ before raising a new issue. Insignificant issue will receive no reply.
 
 
-## 6. News
+## 6. Updates
 
+- __Oct 20, 2020__: Fast-Planner is extended and applied to fast autonomous exploration. Check this [repo](https://github.com/HKUST-Aerial-Robotics/FUEL) for more details.
+  
 - __July 5, 2020__: We will release the implementation of paper: _RAPTOR: Robust and Perception-aware Trajectory Replanning for Quadrotor Fast Flight_ (submitted to TRO, under review) in the future.
 
 - __April 12, 2020__: The implementation of the ICRA2020 paper: _Robust Real-time UAV Replanning Using Guided Gradient-based Optimization and Topological Paths_ is available.

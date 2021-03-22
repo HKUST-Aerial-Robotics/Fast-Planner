@@ -91,7 +91,9 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 
 ## Add gtest based cpp test target and link libraries
+if(TARGERT_ENABLE_TEST)
 catkin_add_gtest(${PROJECT_NAME}-test src/${PROJECT_NAME}_test.cpp)
+endif()
 if(TARGET ${PROJECT_NAME}-test)
   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 endif()

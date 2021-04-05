@@ -71,6 +71,6 @@ add_dependencies(so3_disturbance_generator ${PROJECT_NAME}_gencfg)
 target_link_libraries(so3_disturbance_generator 
    ${catkin_LIBRARIES}
    ${ARMADILLO_LIBRARIES}
-   pose_utils 
+   ${pose_utils_LIBRARIES}
 )
 

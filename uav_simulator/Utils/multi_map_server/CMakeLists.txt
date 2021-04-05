@@ -166,7 +166,7 @@ add_dependencies(multi_map_visualization multi_map_server_messages_cpp)
 target_link_libraries(multi_map_visualization 
    ${catkin_LIBRARIES}
    ${ARMADILLO_LIBRARIES}
-   pose_utils
+   ${pose_utils_LIBRARIES}
 )
 
 #############

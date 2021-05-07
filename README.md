@@ -65,7 +65,7 @@ after that,you can test the fast-planner,run the following commands to setup
 ```
   sudo apt-get install libarmadillo-dev
   cd ${YOUR_WORKSPACE_PATH}/src
-  git clone https://github.com/HKUST-Aerial-Robotics/Fast-Planner.git
+  git clone https://github.com/Junking1/Fast-Planner-for-ubuntu20.04.git
   cd ../ 
   catkin_make
 ```

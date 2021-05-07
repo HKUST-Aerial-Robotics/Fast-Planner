@@ -51,7 +51,7 @@ Please kindly star :star: this project if it helps you. We take great efforts to
 
 
 # Quick start with ubuntu 20.04
-if Ubuntu 20.04,you should install nplot with the source code 
+if Ubuntu 20.04,you should install nlopt with the source code 
 ```
 git clone https://github.com/stevengj/nlopt.git
 cd nlopt

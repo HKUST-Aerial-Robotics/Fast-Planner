@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   visualization_msgs
   cv_bridge
-  nlopt
   plan_env
 )
 
@@ -36,4 +35,5 @@ add_library( bspline_opt
     )
 target_link_libraries( bspline_opt
     ${catkin_LIBRARIES} 
+    nlopt
     )  

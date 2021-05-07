@@ -81,7 +81,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   // Pose
   poseROS.header = msg->header;
   poseROS.header.stamp = msg->header.stamp;
-  poseROS.header.frame_id = string("/world");
+  poseROS.header.frame_id = string("world");
   poseROS.pose.position.x = pose(0);
   poseROS.pose.position.y = pose(1);
   poseROS.pose.position.z = pose(2);
@@ -98,7 +98,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   yprVel(1) = -atan2(vel(2), norm(vel.rows(0,1),2));
   yprVel(2) = 0;
   q = R_to_quaternion(ypr_to_R(yprVel));    
-  velROS.header.frame_id = string("/world");
+  velROS.header.frame_id = string("world");
   velROS.header.stamp = msg->header.stamp;
   velROS.ns = string("velocity");
   velROS.id = 0;
@@ -167,7 +167,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
         }
       }
     }
-    covROS.header.frame_id = string("/world");
+    covROS.header.frame_id = string("world");
     covROS.header.stamp = msg->header.stamp;
     covROS.ns = string("covariance");
     covROS.id = 0;
@@ -216,7 +216,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
         }
       }
     }
-    covVelROS.header.frame_id = string("/world");
+    covVelROS.header.frame_id = string("world");
     covVelROS.header.stamp = msg->header.stamp;
     covVelROS.ns = string("covariance_velocity");
     covVelROS.id = 0;
@@ -246,7 +246,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   ros::Time t = msg->header.stamp;
   if ((t - pt).toSec() > 0.5)
   {
-    trajROS.header.frame_id = string("/world");
+    trajROS.header.frame_id = string("world");
     trajROS.header.stamp    = ros::Time::now();
     trajROS.ns              = string("trajectory");
     trajROS.type            = visualization_msgs::Marker::LINE_LIST;
@@ -287,7 +287,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   }
 
   // Sensor availability
-  sensorROS.header.frame_id = string("/world");
+  sensorROS.header.frame_id = string("world");
   sensorROS.header.stamp    = msg->header.stamp;
   sensorROS.ns              = string("sensor");
   sensorROS.type            = visualization_msgs::Marker::TEXT_VIEW_FACING;
@@ -376,7 +376,7 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
     colvec q90 = R_to_quaternion(ypr_to_R(p90));  
     transform90.setRotation(tf::Quaternion(q90(1), q90(2), q90(3), q90(0)));  
 
-    broadcaster->sendTransform(tf::StampedTransform(transform,   msg->header.stamp, string("/world"),  string("/base")));      
+    broadcaster->sendTransform(tf::StampedTransform(transform,   msg->header.stamp, string("world"),  string("/base")));      
     broadcaster->sendTransform(tf::StampedTransform(transform45, msg->header.stamp, string("/base"), string("/laser")));          
     broadcaster->sendTransform(tf::StampedTransform(transform45, msg->header.stamp, string("/base"), string("/vision")));          
     broadcaster->sendTransform(tf::StampedTransform(transform90, msg->header.stamp, string("/base"), string("/height")));          
@@ -443,7 +443,7 @@ int main(int argc, char** argv)
   n.param("color/a", color_a, 1.0);
   n.param("origin", origin, false);  
   n.param("robot_scale", scale, 2.0);    
-  n.param("frame_id",   _frame_id, string("/world") );    
+  n.param("frame_id",   _frame_id, string("world") );    
  
   n.param("cross_config", cross_config, false);    
   n.param("tf45", tf45, false);    

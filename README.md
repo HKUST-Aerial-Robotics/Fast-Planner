@@ -113,7 +113,7 @@ Besides the folder __fast_planner__, a lightweight __uav_simulator__ is used for
    
 2. We use [**NLopt**](https://nlopt.readthedocs.io/en/latest/NLopt_Installation) to solve the non-linear optimization problem. The __uav_simulator__ depends on the C++ linear algebra library __Armadillo__. The two dependencies can be installed by the following command, in which `${ROS_VERSION_NAME}` is the name of your ROS release.
 ``` 
-sudo apt-get install libarmadillo-dev ros_${ROS_VERSION_NAME}_nlopt
+sudo apt-get install libarmadillo-dev ros-${ROS_DISTRO}-nlopt
 ```
 
 

@@ -182,7 +182,7 @@ int KinodynamicAstar::search(Eigen::Vector3d start_pt, Eigen::Vector3d start_v, 
         if (pro_state(0) <= origin_(0) || pro_state(0) >= map_size_3d_(0) ||
             pro_state(1) <= origin_(1) || pro_state(1) >= map_size_3d_(1) ||
             pro_state(2) <= origin_(2) || pro_state(2) >= map_size_3d_(2)) {
-              std::cout<<"outside map"<<std::endl;
+              
           continue;
         }
 

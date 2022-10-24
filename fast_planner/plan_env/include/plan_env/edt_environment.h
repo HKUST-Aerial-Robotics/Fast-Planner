@@ -66,9 +66,9 @@ public:
   void setObjPrediction(ObjPrediction prediction);
   void setObjScale(ObjScale scale);
   void getSurroundDistance(Eigen::Vector3d pts[2][2][2], double dists[2][2][2]);
-  pair<double, Eigen::Vector3d> interpolateTrilinear(double values[2][2][2], const Eigen::Vector3d& diff,
+  void interpolateTrilinear(double values[2][2][2], const Eigen::Vector3d& diff,
                                                      double& value, Eigen::Vector3d& grad);
-  pair<double, Eigen::Vector3d> evaluateEDTWithGrad(const Eigen::Vector3d& pos, double time,
+  void evaluateEDTWithGrad(const Eigen::Vector3d& pos, double time,
                                                     double& dist, Eigen::Vector3d& grad);
   double evaluateCoarseEDT(Eigen::Vector3d& pos, double time);
   void getMapRegion(Eigen::Vector3d& ori, Eigen::Vector3d& size) {

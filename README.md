@@ -52,14 +52,23 @@ Please kindly star :star: this project if it helps you. We take great efforts to
 
 ## 1. Quick Start
 
-The project has been tested on Ubuntu 16.04(ROS Kinetic) and 18.04(ROS Melodic). Take Ubuntu 18.04 as an example, run the following commands to setup:
+# Quick start with ubuntu 20.04
 
 ```
-  sudo apt-get install libarmadillo-dev ros-melodic-nlopt
+git clone https://github.com/stevengj/nlopt.git
+cd nlopt
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+```
+  sudo apt-get install libarmadillo-dev
   cd ${YOUR_WORKSPACE_PATH}/src
-  git clone https://github.com/HKUST-Aerial-Robotics/Fast-Planner.git
+  git clone https://github.com/Iliaaer/Fast-Planner
   cd ../ 
-  catkin_make
+  catkin_make -DCMAKE_CXX_STANDARD=14
 ```
 
 You may check the detailed [instruction](#3-setup-and-config) to setup the project. 

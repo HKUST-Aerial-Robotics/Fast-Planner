@@ -1,5 +1,5 @@
 <launch>
-  <arg name="init_x" value="-19.0"/>
+  <arg name="init_x" value="-0.0"/>
   <arg name="init_y" value="-0.0"/>
   <arg name="init_z" value="1.0"/> 
   <arg name="obj_num" value="1" />

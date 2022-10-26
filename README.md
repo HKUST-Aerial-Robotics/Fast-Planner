@@ -16,17 +16,18 @@ cd ${YOUR_WORKSPACE_PATH}/src
 git clone https://github.com/Iliaaer/Fast-Planner
 cd ../ 
 catkin_make -DCMAKE_CXX_STANDARD=14
+bash ~./bashrc
 ```
 ## Запуск пакетов:
 Запуск визуализации:
 ```bash
-  source devel/setup.bash && roslaunch plan_manage rviz.launch
+roslaunch plan_manage rviz.launch
 ```
 Запуск полета до точки:
 ```bash
-  source devel/setup.bash && roslaunch plan_manage kino_replan.launch
+roslaunch plan_manage kino_replan.launch
 ```
 Запуск полета по прямой:
 ```bash
-  source devel/setup.bash && roslaunch plan_manage kino_replan.launch
+roslaunch plan_manage kino_replan.launch
 ```

@@ -1,6 +1,7 @@
 ## Установка пакета на ubuntu 20.04:
 Установка оптимизатора nlopt:
 ```
+cd ~/catkin_ws/src
 git clone https://github.com/stevengj/nlopt.git
 cd nlopt
 mkdir build
@@ -11,8 +12,9 @@ sudo make install
 ```
 Установка и сборка пакета:
 ```
+cd ~/catkin_ws/src
 sudo apt-get install libarmadillo-dev
-cd ${YOUR_WORKSPACE_PATH}/src
+sudo apt install ros-noetic-pcl-conversions
 git clone https://github.com/Iliaaer/Fast-Planner
 cd ../ 
 catkin_make -DCMAKE_CXX_STANDARD=14

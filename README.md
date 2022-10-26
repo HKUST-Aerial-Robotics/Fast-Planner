@@ -13,8 +13,9 @@ sudo make install
 Установка и сборка пакета:
 ```
 cd ~/catkin_ws/src
+sudo apt update
 sudo apt-get install -y libarmadillo-dev
-sudo apt install -y ros-noetic-pcl-conversions
+sudo apt install -y --fix-missing ros-noetic-pcl-conversions
 git clone https://github.com/Iliaaer/Fast-Planner
 cd ../ 
 catkin_make -DCMAKE_CXX_STANDARD=14

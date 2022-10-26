@@ -5,7 +5,11 @@
   <arg name="map_size_z" value=" 5.0"/>
 
   <!-- topic of your odometry such as VIO or LIO -->
-  <arg name="odom_topic" value="/state_ukf/odom" />
+  <!-- <arg name="odom_topic" value="/state_ukf/odom" /> -->
+  
+  <!-- topic for px4 VIO -->
+  <arg name="odom_topic" value="/mavros/local_position/odom" />
+
 
   <!-- main algorithm params -->
   <include file="$(find plan_manage)/launch/kino_algorithm.xml">

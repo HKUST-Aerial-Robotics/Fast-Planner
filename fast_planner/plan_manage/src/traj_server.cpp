@@ -31,6 +31,7 @@
 #include "visualization_msgs/Marker.h"
 #include <ros/ros.h>
 #include "geometry_msgs/PoseStamped.h"
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 
 ros::Publisher cmd_vis_pub, pos_cmd_pub, traj_pub, clover_cmd_pub;
@@ -64,7 +65,7 @@ vector<Eigen::Vector3d> traj_cmd_, traj_real_;
 void displayTrajWithColor(vector<Eigen::Vector3d> path, double resolution, Eigen::Vector4d color,
                           int id) {
     visualization_msgs::Marker mk;
-    mk.header.frame_id = "world";
+    mk.header.frame_id = "map";
     mk.header.stamp = ros::Time::now();
     mk.type = visualization_msgs::Marker::SPHERE_LIST;
     mk.action = visualization_msgs::Marker::DELETE;
@@ -101,7 +102,7 @@ void displayTrajWithColor(vector<Eigen::Vector3d> path, double resolution, Eigen
 void drawCmd(const Eigen::Vector3d& pos, const Eigen::Vector3d& vec, const int& id,
              const Eigen::Vector4d& color) {
     visualization_msgs::Marker mk_state;
-    mk_state.header.frame_id = "world";
+    mk_state.header.frame_id = "map";
     mk_state.header.stamp = ros::Time::now();
     mk_state.id = id;
     mk_state.type = visualization_msgs::Marker::ARROW;
@@ -245,7 +246,7 @@ void cmdCallback(const ros::TimerEvent& e) {
     }
 
     cmd.header.stamp = time_now;
-    cmd.header.frame_id = "world";
+    cmd.header.frame_id = "map";
     cmd.trajectory_flag = quadrotor_msgs::PositionCommand::TRAJECTORY_STATUS_READY;
     cmd.trajectory_id = traj_id_;
 
@@ -294,11 +295,13 @@ void cmdCallback(const ros::TimerEvent& e) {
     cmd_clover.pose.position.x = cmd.position.x;
     cmd_clover.pose.position.y = cmd.position.y;
     cmd_clover.pose.position.z = cmd.position.z;
-
-    cmd_clover.pose.orientation.x = 0;
-    cmd_clover.pose.orientation.y = 0;
-    cmd_clover.pose.orientation.z = sin(last_yaw_/2);
-    cmd_clover.pose.orientation.w = cos(last_yaw_/2);
+    tf2::Quaternion myQuaternion;
+    myQuaternion.setRPY(0, 0, yaw);
+    myQuaternion=myQuaternion.normalize();
+    cmd_clover.pose.orientation.x = myQuaternion[0];
+    cmd_clover.pose.orientation.y = myQuaternion[1];
+    cmd_clover.pose.orientation.z = myQuaternion[2];
+    cmd_clover.pose.orientation.w = myQuaternion[3];
 
 //    ros::ServiceClient client = n.serviceClient<srv::Navigate>("add_two_ints");
 

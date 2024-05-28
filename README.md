@@ -1,6 +1,7 @@
 # Fast-Planner
 
-**Fast-Planner** is developed aiming to enable quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. 
+**Fast-Planner** is developed aiming to enable quadrotor fast flight in complex unknown environments. It contains a rich set of carefully designed planning algorithms. It is the foundation of several projects, including [ego-planner](https://github.com/ZJU-FAST-Lab/ego-planner),
+[FUEL](https://github.com/HKUST-Aerial-Robotics/FUEL).
 
 **News**: 
 

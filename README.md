@@ -51,12 +51,45 @@ Please kindly star :star: this project if it helps you. We take great efforts to
 * [Known issues](#known-issues)
 
 
+
+# Quick start with ubuntu 20.04
+if Ubuntu 20.04,you should install nlopt with the source code 
+```
+git clone https://github.com/stevengj/nlopt.git
+cd nlopt
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+```
+after that,you can test the fast-planner,run the following commands to setup
+```
+  sudo apt-get install libarmadillo-dev
+  cd ${YOUR_WORKSPACE_PATH}/src
+  git clone https://github.com/Junking1/Fast-Planner-for-ubuntu20.04.git
+  cd ../ 
+  catkin_make
+```
+You may check the detailed [instruction](#3-setup-and-config) to setup the project. 
+After compilation you can start the visualization by: 
+
+```
+  source devel/setup.bash && roslaunch plan_manage rviz.launch
+```
+and start a simulation (run in a new terminals): 
+```
+  source devel/setup.bash && roslaunch plan_manage kino_replan.launch
+```
+You will find the random map and the drone in ```Rviz```. You can select goals for the drone to reach using the ```2D Nav Goal``` tool. A sample simulation is showed [here](#demo1).
+
+
 ## 1. Quick Start
 
 The project has been tested on Ubuntu 16.04(ROS Kinetic) and 18.04(ROS Melodic). Take Ubuntu 18.04 as an example, run the following commands to setup:
 
 ```
-  sudo apt-get install libarmadillo-dev ros-melodic-nlopt
+  sudo apt-get install libarmadillo-dev
   cd ${YOUR_WORKSPACE_PATH}/src
   git clone https://github.com/HKUST-Aerial-Robotics/Fast-Planner.git
   cd ../ 

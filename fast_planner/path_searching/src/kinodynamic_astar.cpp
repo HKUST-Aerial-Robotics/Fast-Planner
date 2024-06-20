@@ -178,6 +178,14 @@ int KinodynamicAstar::search(Eigen::Vector3d start_pt, Eigen::Vector3d start_v, 
 
         Eigen::Vector3d pro_pos = pro_state.head(3);
 
+        // check if in map
+        if (pro_state(0) <= origin_(0) || pro_state(0) >= map_size_3d_(0) ||
+            pro_state(1) <= origin_(1) || pro_state(1) >= map_size_3d_(1) ||
+            pro_state(2) <= origin_(2) || pro_state(2) >= map_size_3d_(2)) {
+              
+          continue;
+        }
+
         // Check if in close set
         Eigen::Vector3i pro_id = posToIndex(pro_pos);
         int pro_t_id = timeToIndex(pro_t);
